@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "496923338414",
+    "project_id": "friendly-card",
+    "storage_bucket": "friendly-card.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496923338414:android:24a2e32d73a714a401af3f",
+        "android_client_info": {
+          "package_name": "com.vdkhanh.friendlycard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC5fiyM2jV6IhRnzpcIBIznSUPUUb6dsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
