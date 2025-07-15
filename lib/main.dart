@@ -15,12 +15,12 @@ void main() async {
 
   await Firebase.initializeApp(
     options: const FirebaseOptions(
-      apiKey: "AIzaSyChRlFdEsMK3Ns-UPvB9XlO3WKsJeX60fA",
+      apiKey: "AIzaSyBC5fiyM2jV6IhRnzpcIBIznSUPUUb6dsA",
       authDomain: "friendly-card.firebaseapp.com",
       projectId: "friendly-card",
       storageBucket: "friendly-card.firebasestorage.app",
       messagingSenderId: "496923338414",
-      appId: "1:496923338414:web:5f7661463632815501af3f",
+      appId: "1:496923338414:android:24a2e32d73a714a401af3f",
     ),
   );
 
