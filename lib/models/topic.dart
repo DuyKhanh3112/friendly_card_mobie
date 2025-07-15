@@ -9,6 +9,8 @@ class Topic {
   Timestamp update_at;
   String status;
   String image;
+  // num num_vocabulary;
+  // num num_studied;
 
   Topic({
     required this.id,
@@ -17,6 +19,8 @@ class Topic {
     required this.update_at,
     required this.status,
     required this.image,
+    // required this.num_vocabulary,
+    // required this.num_studied,
   });
 
   factory Topic.initTopic() {
@@ -27,6 +31,8 @@ class Topic {
       update_at: Timestamp.now(),
       status: 'draft',
       image: '',
+      // num_vocabulary: 0,
+      // num_studied: 0,
     );
   }
 
@@ -35,9 +41,11 @@ class Topic {
       id: json['id'],
       name: json['name'],
       user_id: json['user_id'],
-      status: json['status'] ?? 'draft',
+      status: json['status'],
       update_at: json['update_at'],
       image: json['image'],
+      // num_vocabulary: json['num_vocabulary'] ?? 0,
+      // num_studied: json['num_studied'] ?? 0,
     );
   }
 
@@ -49,12 +57,13 @@ class Topic {
       'status': status,
       'update_at': update_at,
       'image': image,
+      // 'num_vocabulary': num_vocabulary,
+      // 'num_studied': num_studied
     };
   }
 
   Map<String, dynamic> toVal() {
     return {
-      // 'id': id,
       'name': name,
       'user_id': user_id,
       'status': status,

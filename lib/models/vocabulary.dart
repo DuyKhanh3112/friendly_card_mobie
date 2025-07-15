@@ -13,6 +13,7 @@ class Vocabulary {
   String example;
   String mean_example;
   String transcription;
+  bool is_studied;
 
   Vocabulary({
     required this.id,
@@ -25,6 +26,7 @@ class Vocabulary {
     required this.mean_example,
     required this.mean,
     required this.transcription,
+    required this.is_studied,
   });
 
   factory Vocabulary.initVocabulary() {
@@ -39,21 +41,24 @@ class Vocabulary {
       mean: '',
       transcription: '',
       mean_example: '',
+      is_studied: false,
     );
   }
 
   static Vocabulary fromJson(Map<String, dynamic> json) {
     return Vocabulary(
-        id: json['id'],
-        name: json['name'],
-        topic_id: json['topic_id'],
-        status: json['status'] ?? 'draft',
-        update_at: json['update_at'],
-        image: json['image'],
-        example: json['example'],
-        mean: json['mean'],
-        transcription: json['transcription'],
-        mean_example: json['mean_example']);
+      id: json['id'],
+      name: json['name'],
+      topic_id: json['topic_id'],
+      status: json['status'] ?? 'draft',
+      update_at: json['update_at'],
+      image: json['image'],
+      example: json['example'],
+      mean: json['mean'],
+      transcription: json['transcription'],
+      mean_example: json['mean_example'],
+      is_studied: json['is_studied'] ?? false,
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -67,7 +72,8 @@ class Vocabulary {
       'example': example,
       'mean': mean,
       'transcription': transcription,
-      'mean_example': mean_example
+      'mean_example': mean_example,
+      'is_studied': is_studied
     };
   }
 

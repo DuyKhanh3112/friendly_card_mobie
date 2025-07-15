@@ -13,7 +13,7 @@ class Users {
   String role;
   String? avatar;
   bool active;
-  String? reason_lock;
+  num daily_goal;
 
   Users({
     required this.id,
@@ -26,7 +26,7 @@ class Users {
     required this.update_at,
     required this.role,
     required this.active,
-    this.reason_lock,
+    required this.daily_goal,
   });
 
   factory Users.initUser() {
@@ -41,7 +41,7 @@ class Users {
       phone: '',
       avatar: '',
       active: true,
-      reason_lock: '',
+      daily_goal: 0,
     );
   }
   factory Users.initLearner() {
@@ -56,7 +56,7 @@ class Users {
       phone: '',
       avatar: '',
       active: true,
-      reason_lock: '',
+      daily_goal: 0,
     );
   }
   factory Users.initTeacher() {
@@ -71,7 +71,7 @@ class Users {
       phone: '',
       avatar: '',
       active: true,
-      reason_lock: '',
+      daily_goal: 0,
     );
   }
 
@@ -87,7 +87,7 @@ class Users {
       phone: json['phone'] ?? '',
       avatar: json['avatar'] ?? '',
       active: json['active'],
-      reason_lock: json['reason_lock'] ?? '',
+      daily_goal: json['daily_goal'] ?? 0,
     );
   }
 
@@ -103,7 +103,7 @@ class Users {
       'phone': phone ?? '',
       'avatar': avatar ?? '',
       'active': active,
-      'reason_lock': reason_lock
+      'daily_goal': daily_goal,
     };
   }
 
@@ -119,7 +119,7 @@ class Users {
       'phone': phone ?? '',
       'avatar': avatar ?? '',
       'active': active,
-      'reason_lock': reason_lock,
+      'daily_goal': daily_goal,
     };
   }
 }

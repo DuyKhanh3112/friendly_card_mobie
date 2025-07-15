@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:friendly_card_mobie/controllers/main_controller.dart';
 import 'package:friendly_card_mobie/models/users.dart';
 import 'package:get/get.dart';
 
@@ -35,8 +36,8 @@ class UsersController extends GetxController {
           snapshot.docs[0].data() as Map<String, dynamic>;
       data['id'] = snapshot.docs[0].id;
       user.value = Users.fromJson(data);
-
       role.value = user.value.role;
+      await Get.find<MainController>().loadData();
       loading.value = false;
       Get.toNamed('/');
       return true;
@@ -49,7 +50,7 @@ class UsersController extends GetxController {
     loading.value = true;
     user.value = Users.initUser();
     role.value = '';
-    Get.toNamed('/');
+    Get.toNamed('/login');
     loading.value = false;
   }
 
