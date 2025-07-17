@@ -52,9 +52,9 @@ class Tool {
 
   static Future<void> textToSpeak(String text) async {
     FlutterTts flutterTts = FlutterTts();
-    await flutterTts.setLanguage("vi-VN"); // hỗ trợ "vi-VN", "en-US", ...
+    await flutterTts.setLanguage("en-UK"); // hỗ trợ "vi-VN", "en-US", ...
     await flutterTts.setPitch(1.0); // 0.5 - 2.0
-    await flutterTts.setSpeechRate(0.5); // 0.0 - 1.0
+    await flutterTts.setSpeechRate(0.25); // 0.0 - 1.0
     await flutterTts.setVolume(1.0); // 0.0 - 1.0
     await flutterTts.speak(text);
   }

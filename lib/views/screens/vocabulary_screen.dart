@@ -1,7 +1,9 @@
 // ignore_for_file: avoid_unnecessary_containers
 
 import 'package:flip_card/flip_card.dart';
+import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:friendly_card_mobie/components/custom_button.dart';
 import 'package:friendly_card_mobie/controllers/topic_controller.dart';
 import 'package:friendly_card_mobie/controllers/vocabulary_controller.dart';
 import 'package:friendly_card_mobie/models/vocabulary.dart';
@@ -19,18 +21,21 @@ class VocabularyScreen extends StatelessWidget {
         Get.find<VocabularyController>();
     TopicController topicController = Get.find<TopicController>();
     RxList<Vocabulary> listVocabulary = <Vocabulary>[].obs;
+
     Rx<Vocabulary> vocabulary = Vocabulary.initVocabulary().obs;
     RxBool isFront = true.obs;
 
-    GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
     RxBool hideVoice = false.obs;
-
+    listVocabulary.value = vocabularyController.listVocabulary.value
+        .where((voca) =>
+            !voca.is_studied && voca.topic_id == topicController.topic.value.id)
+        .toList();
+    RxInt currentIndex = 0.obs;
+    GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
+    // Rx<FlipCardController> flip_card_controller = FlipCardController().obs;
     return Obx(() {
-      listVocabulary.value = vocabularyController.listVocabulary.value
-          .where((voca) =>
-              !voca.is_studied &&
-              voca.topic_id == topicController.topic.value.id)
-          .toList();
+      // print(cardKey)
+      vocabulary.value = listVocabulary.value[currentIndex.value];
       return vocabularyController.loading.value
           ? LoadingPage()
           : Scaffold(
@@ -52,6 +57,7 @@ class VocabularyScreen extends StatelessWidget {
                     vertical: Get.height * 0.03,
                   ),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       listVocabulary.value.isEmpty
                           ? SizedBox()
@@ -61,6 +67,7 @@ class VocabularyScreen extends StatelessWidget {
                                 children: [
                                   FlipCard(
                                     key: cardKey,
+                                    // controller: flip_card_controller.value,
                                     flipOnTouch: true,
                                     onFlipDone: (value) {
                                       hideVoice.value = false;
@@ -70,11 +77,11 @@ class VocabularyScreen extends StatelessWidget {
                                     },
                                     front: Container(
                                       child: frontCard(
-                                          listVocabulary, isFront, context),
+                                          vocabulary.value, isFront, context),
                                     ),
                                     back: Container(
                                       child: backCard(
-                                          listVocabulary, isFront, context),
+                                          vocabulary.value, isFront, context),
                                     ),
                                   ),
                                   hideVoice.value
@@ -82,8 +89,7 @@ class VocabularyScreen extends StatelessWidget {
                                       : InkWell(
                                           onTap: () async {
                                             await Tool.textToSpeak(
-                                                listVocabulary
-                                                    .value.first.name);
+                                                vocabulary.value.name);
                                           },
                                           child: Container(
                                             margin: EdgeInsets.all(
@@ -97,6 +103,40 @@ class VocabularyScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: Get.width * 0.3,
+                            child: CustomButton(
+                              title: 'Trước',
+                              onClicked: currentIndex > 0
+                                  ? () async {
+                                      // vocabulary.value = listVocabulary[1];
+                                      currentIndex.value =
+                                          currentIndex.value - 1;
+                                      cardKey = GlobalKey<FlipCardState>();
+                                    }
+                                  : null,
+                            ),
+                          ),
+                          Container(
+                            width: Get.width * 0.3,
+                            child: CustomButton(
+                              title: 'Tiếp theo',
+                              onClicked:
+                                  currentIndex < listVocabulary.value.length - 1
+                                      ? () async {
+                                          // vocabulary.value = listVocabulary[1];
+                                          currentIndex.value =
+                                              currentIndex.value + 1;
+                                          cardKey = GlobalKey<FlipCardState>();
+                                        }
+                                      : null,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -106,7 +146,7 @@ class VocabularyScreen extends StatelessWidget {
   }
 
   Widget frontCard(
-      RxList<Vocabulary> listVocabulary, RxBool isFront, BuildContext context) {
+      Vocabulary vocabulary, RxBool isFront, BuildContext context) {
     return Card(
       elevation: 8,
       clipBehavior: Clip.antiAlias,
@@ -121,7 +161,7 @@ class VocabularyScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.network(
-              listVocabulary.value.first.image,
+              vocabulary.image,
               width: Get.width,
               height: Get.height * 0.4,
               fit: BoxFit.cover,
@@ -135,7 +175,7 @@ class VocabularyScreen extends StatelessWidget {
                 child: ListView(
                   children: [
                     Text(
-                      listVocabulary.value.first.name,
+                      vocabulary.name,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
@@ -144,7 +184,7 @@ class VocabularyScreen extends StatelessWidget {
                           ),
                     ),
                     Text(
-                      listVocabulary.value.first.transcription,
+                      vocabulary.transcription,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             // fontWeight:
@@ -155,7 +195,7 @@ class VocabularyScreen extends StatelessWidget {
                           ),
                     ),
                     Text(
-                      'Example: ${listVocabulary.value.first.example}',
+                      'Example: ${vocabulary.example}',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
@@ -189,8 +229,7 @@ class VocabularyScreen extends StatelessWidget {
     );
   }
 
-  Widget backCard(
-      RxList<Vocabulary> listVocabulary, RxBool isFront, BuildContext context) {
+  Widget backCard(Vocabulary vocabulary, RxBool isFront, BuildContext context) {
     return Card(
       elevation: 8,
       clipBehavior: Clip.antiAlias,
@@ -205,7 +244,7 @@ class VocabularyScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.network(
-              listVocabulary.value.first.image,
+              vocabulary.image,
               width: Get.width,
               height: Get.height * 0.4,
               fit: BoxFit.cover,
@@ -219,7 +258,7 @@ class VocabularyScreen extends StatelessWidget {
                 child: ListView(
                   children: [
                     Text(
-                      listVocabulary.value.first.mean,
+                      vocabulary.mean,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
@@ -239,7 +278,7 @@ class VocabularyScreen extends StatelessWidget {
                           ),
                     ),
                     Text(
-                      'Ví dụ: ${listVocabulary.value.first.mean_example}',
+                      'Ví dụ: ${vocabulary.mean_example}',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
