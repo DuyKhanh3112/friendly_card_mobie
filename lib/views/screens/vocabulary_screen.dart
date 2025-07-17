@@ -6,6 +6,7 @@ import 'package:friendly_card_mobie/controllers/topic_controller.dart';
 import 'package:friendly_card_mobie/controllers/vocabulary_controller.dart';
 import 'package:friendly_card_mobie/models/vocabulary.dart';
 import 'package:friendly_card_mobie/utils/app_color.dart';
+import 'package:friendly_card_mobie/utils/tool.dart';
 import 'package:friendly_card_mobie/widget/loading_page.dart';
 import 'package:get/get.dart';
 
@@ -78,12 +79,19 @@ class VocabularyScreen extends StatelessWidget {
                                   ),
                                   hideVoice.value
                                       ? SizedBox()
-                                      : Container(
-                                          margin:
-                                              EdgeInsets.all(Get.width * 0.02),
-                                          child: Icon(
-                                            Icons.volume_down_alt,
-                                            size: 32,
+                                      : InkWell(
+                                          onTap: () async {
+                                            await Tool.textToSpeak(
+                                                listVocabulary
+                                                    .value.first.name);
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.all(
+                                                Get.width * 0.02),
+                                            child: Icon(
+                                              Icons.volume_down_alt,
+                                              size: 32,
+                                            ),
                                           ),
                                         ),
                                 ],
