@@ -1,10 +1,11 @@
 // ignore_for_file: file_names, unnecessary_brace_in_string_interps
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:friendly_card_mobie/utils/app_color.dart';
 import 'package:get/get.dart';
 
-enum ContactType { mail, phone }
+enum ContactType { mail, phone, number }
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
@@ -52,6 +53,11 @@ class CustomTextField extends StatelessWidget {
           ),
           obscureText: hideContent.value,
           maxLines: multiLines == true ? 3 : 1,
+          keyboardType:
+              type == ContactType.number ? TextInputType.number : null,
+          inputFormatters: type == ContactType.number
+              ? [FilteringTextInputFormatter.digitsOnly]
+              : null,
           minLines: 1,
           decoration: InputDecoration(
             labelText: label,
@@ -102,6 +108,11 @@ class CustomTextField extends StatelessWidget {
                 );
                 if (!emailRegExp.hasMatch(value)) {
                   return '${label} không hợp lệ. Ví dụ: user@gmail.com';
+                }
+              }
+              if (type == ContactType.number) {
+                if (num.parse(value) <= 0) {
+                  return '${label} phải lớn hơn 0.';
                 }
               }
             }

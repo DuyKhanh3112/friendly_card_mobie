@@ -86,4 +86,12 @@ class UsersController extends GetxController {
     await usersCollection.doc(user.value.id).update(user.value.toVal());
     loading.value = false;
   }
+
+  Future<void> updateGoal(int goal) async {
+    loading.value = true;
+    user.value.update_at = Timestamp.now();
+    user.value.daily_goal = goal;
+    await usersCollection.doc(user.value.id).update(user.value.toVal());
+    loading.value = false;
+  }
 }

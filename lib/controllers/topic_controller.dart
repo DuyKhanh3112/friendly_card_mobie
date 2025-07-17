@@ -46,7 +46,9 @@ class TopicController extends GetxController {
   // }
 
   RxList<Topic> listTopics = <Topic>[].obs;
-  UsersController usersController = Get.find<UsersController>();
+  Rx<Topic> topic = Topic.initTopic().obs;
+
+  // UsersController usersController = Get.find<UsersController>();
 
   Future<void> loadTopic() async {
     loading.value = true;

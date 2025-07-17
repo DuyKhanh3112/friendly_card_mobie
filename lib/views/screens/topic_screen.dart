@@ -83,56 +83,66 @@ class TopicScreen extends StatelessWidget {
           margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              Image.network(
-                topic.image,
-                width: Get.width,
-                fit: BoxFit.cover,
-              ),
-              // Lớp phủ màu đen mờ để chữ nổi bật
-              Container(
-                height: Get.height * 0.2,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+          child: InkWell(
+            onTap: () async {
+              Get.find<TopicController>().topic.value = topic;
+              Get.toNamed('/vocabulary');
+            },
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                Image.network(
+                  topic.image,
+                  width: Get.width,
+                  fit: BoxFit.cover,
+                ),
+                // Lớp phủ màu đen mờ để chữ nổi bật
+                Container(
+                  height: Get.height * 0.2,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.7)
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      topic.name.toUpperCase(),
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                    ),
-                    Text(
-                      'Đã học ${completed.value}/${total.value} từ',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.white70,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    SizedBox(height: Get.height * 0.01),
-                    LinearProgressIndicator(
-                      value: completed.value / total.value,
-                      backgroundColor: Colors.white.withOpacity(0.3),
-                      valueColor:
-                          const AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        topic.name.toUpperCase(),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                      ),
+                      Text(
+                        'Đã học ${completed.value}/${total.value} từ',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.white70,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      SizedBox(height: Get.height * 0.01),
+                      LinearProgressIndicator(
+                        value: completed.value / total.value,
+                        backgroundColor: Colors.white.withOpacity(0.3),
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );

@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, unused_import
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import 'package:friendly_card_mobie/models/vocabulary.dart';
 import 'package:friendly_card_mobie/utils/inital_binding.dart';
 import 'package:friendly_card_mobie/views/home_page.dart';
 import 'package:friendly_card_mobie/views/login_page.dart';
+import 'package:friendly_card_mobie/views/screens/vocabulary_screen.dart';
 import 'package:get/get.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_storage/get_storage.dart';
@@ -40,62 +42,62 @@ void main() async {
 
   runApp(const MyApp());
 
-  // await Timer.periodic(Duration(seconds: 30), (timer) async {
-  //   log('30s load 1 lan');
-  //   TopicController topicController = Get.find<TopicController>();
-  //   VocabularyController vocabularyController =
-  //       Get.find<VocabularyController>();
-  //   StudyHistoryController studyHistoryController =
-  //       Get.find<StudyHistoryController>();
-  //   UsersController usersController = Get.find<UsersController>();
+  await Timer.periodic(Duration(seconds: 30), (timer) async {
+    log('30s load 1 lan');
+    TopicController topicController = Get.find<TopicController>();
+    VocabularyController vocabularyController =
+        Get.find<VocabularyController>();
+    StudyHistoryController studyHistoryController =
+        Get.find<StudyHistoryController>();
+    UsersController usersController = Get.find<UsersController>();
 
-  //   List<Topic> listTopic = [];
-  //   List<Vocabulary> listVocabulary = [];
-  //   List<StudyHistory> listHistory = [];
+    List<Topic> listTopic = [];
+    List<Vocabulary> listVocabulary = [];
+    List<StudyHistory> listHistory = [];
 
-  //   if (usersController.user.value.id != '') {
-  //     var snapshortTopic = await topicController.topicCollection
-  //         .where('status', isEqualTo: 'active')
-  //         .get();
-  //     for (var topicItem in snapshortTopic.docs) {
-  //       var snapshortVoca = await vocabularyController.vocabularyCollection
-  //           .where('topic_id', isEqualTo: topicItem.id)
-  //           .where('status', isEqualTo: 'active')
-  //           .get();
+    if (usersController.user.value.id != '') {
+      var snapshortTopic = await topicController.topicCollection
+          .where('status', isEqualTo: 'active')
+          .get();
+      for (var topicItem in snapshortTopic.docs) {
+        var snapshortVoca = await vocabularyController.vocabularyCollection
+            .where('topic_id', isEqualTo: topicItem.id)
+            .where('status', isEqualTo: 'active')
+            .get();
 
-  //       if (snapshortVoca.docs.isNotEmpty) {
-  //         for (var vocaItem in snapshortVoca.docs) {
-  //           var snapshortHistory = await studyHistoryController
-  //               .studyHistoryCollection
-  //               .where('vocabulary_id', isEqualTo: vocaItem.id)
-  //               .where('user_id', isEqualTo: usersController.user.value.id)
-  //               .get();
-  //           for (var item in snapshortHistory.docs) {
-  //             Map<String, dynamic> data = item.data() as Map<String, dynamic>;
-  //             data['id'] = item.id;
-  //             listHistory.add((StudyHistory.fromJson(data)));
-  //           }
+        if (snapshortVoca.docs.isNotEmpty) {
+          for (var vocaItem in snapshortVoca.docs) {
+            var snapshortHistory = await studyHistoryController
+                .studyHistoryCollection
+                .where('vocabulary_id', isEqualTo: vocaItem.id)
+                .where('user_id', isEqualTo: usersController.user.value.id)
+                .get();
+            for (var item in snapshortHistory.docs) {
+              Map<String, dynamic> data = item.data() as Map<String, dynamic>;
+              data['id'] = item.id;
+              listHistory.add((StudyHistory.fromJson(data)));
+            }
 
-  //           Map<String, dynamic> vocaData =
-  //               vocaItem.data() as Map<String, dynamic>;
-  //           vocaData['id'] = vocaItem.id;
-  //           vocaData['is_studied'] = snapshortHistory.docs.isNotEmpty;
+            Map<String, dynamic> vocaData =
+                vocaItem.data() as Map<String, dynamic>;
+            vocaData['id'] = vocaItem.id;
+            vocaData['is_studied'] = snapshortHistory.docs.isNotEmpty;
 
-  //           listVocabulary.add(Vocabulary.fromJson(vocaData));
-  //         }
-  //         Map<String, dynamic> topicData =
-  //             topicItem.data() as Map<String, dynamic>;
-  //         topicData['id'] = topicItem.id;
-  //         listTopic.add(Topic.fromJson(topicData));
-  //       }
-  //     }
+            listVocabulary.add(Vocabulary.fromJson(vocaData));
+          }
+          Map<String, dynamic> topicData =
+              topicItem.data() as Map<String, dynamic>;
+          topicData['id'] = topicItem.id;
+          listTopic.add(Topic.fromJson(topicData));
+        }
+      }
 
-  //     topicController.listTopics.value = listTopic;
-  //     vocabularyController.listVocabulary.value = listVocabulary;
-  //     studyHistoryController.listHistory.value = listHistory;
-  //   }
-  //   log('done');
-  // });
+      topicController.listTopics.value = listTopic;
+      vocabularyController.listVocabulary.value = listVocabulary;
+      studyHistoryController.listHistory.value = listHistory;
+    }
+    log('done');
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -124,7 +126,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/',
           page: () => const HomePage(),
-          // page: () => const TestPage(),
+        ),
+        GetPage(
+          name: '/vocabulary',
+          page: () => const VocabularyScreen(),
         ),
       ],
     );

@@ -15,6 +15,7 @@ class VocabularyController extends GetxController {
       FirebaseFirestore.instance.collection('study_history');
 
   RxList<Vocabulary> listVocabulary = <Vocabulary>[].obs;
+  Rx<Vocabulary> vocabulary = Vocabulary.initVocabulary().obs;
 
   UsersController usersController = Get.find<UsersController>();
 

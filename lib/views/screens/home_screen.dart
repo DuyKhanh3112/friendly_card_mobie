@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:friendly_card_mobie/components/custom_button.dart';
+import 'package:friendly_card_mobie/components/custom_text_field.dart';
 import 'package:friendly_card_mobie/controllers/main_controller.dart';
 import 'package:friendly_card_mobie/controllers/study_history_controller.dart';
 import 'package:friendly_card_mobie/controllers/topic_controller.dart';
@@ -127,13 +128,18 @@ class DailyGoalWidget extends StatelessWidget {
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.red,
+                                  color: AppColor.royalBlue,
                                 ),
                       ),
                     ),
                     Container(
                         width: Get.width * 0.3,
-                        child: CustomButton(title: 'Đặt mục tiêu'))
+                        child: CustomButton(
+                          title: 'Đặt mục tiêu',
+                          onClicked: () async {
+                            await updateGoal(context);
+                          },
+                        ))
                   ],
                 ),
               ),
@@ -212,6 +218,103 @@ class DailyGoalWidget extends StatelessWidget {
               ),
             );
     });
+  }
+
+  Future<void> updateGoal(BuildContext context) async {
+    final formKey = GlobalKey<FormState>();
+    TextEditingController numController = TextEditingController(text: '10');
+    await Get.dialog(
+      AlertDialog(
+        titlePadding: EdgeInsets.symmetric(
+          horizontal: Get.width * 0.025,
+          vertical: Get.width * 0.01,
+        ),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: Get.width * 0.025,
+          // vertical: Get.width * 0.01,
+        ),
+        buttonPadding: EdgeInsets.symmetric(
+          horizontal: Get.width * 0.025,
+          vertical: Get.width * 0.01,
+        ),
+        actionsPadding: EdgeInsets.symmetric(
+          horizontal: Get.width * 0.025,
+          vertical: Get.width * 0.01,
+        ),
+        title: Column(
+          children: [
+            Text(
+              'Mục tiêu',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.blue,
+                  ),
+            ),
+            Divider(
+              color: AppColor.blue,
+            ),
+          ],
+        ),
+        content: Container(
+          child: Form(
+            key: formKey,
+            child: CustomTextField(
+              controller: numController,
+              label: 'Số từ vựng',
+              required: true,
+              type: ContactType.number,
+            ),
+          ),
+        ),
+        actions: [
+          Column(
+            children: [
+              Divider(
+                color: AppColor.blue,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                // width: Get.width * 0.8,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.red),
+                        foregroundColor: WidgetStatePropertyAll(Colors.white),
+                      ),
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: Text('Đóng'),
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(AppColor.blue),
+                        foregroundColor: WidgetStatePropertyAll(Colors.white),
+                      ),
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          Get.back();
+                          Get.find<MainController>().loading.value = true;
+                          await Get.find<UsersController>()
+                              .updateGoal(int.parse(numController.value.text));
+                          Get.find<MainController>().loading.value = false;
+                        }
+                      },
+                      child: Text('Xác nhận'),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 
