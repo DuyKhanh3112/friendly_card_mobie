@@ -2,12 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:friendly_card_mobie/controllers/main_controller.dart';
-import 'package:friendly_card_mobie/controllers/study_history_controller.dart';
-import 'package:friendly_card_mobie/controllers/topic_controller.dart';
-import 'package:friendly_card_mobie/controllers/users_controller.dart';
-import 'package:friendly_card_mobie/controllers/vocabulary_controller.dart';
-import 'package:friendly_card_mobie/models/topic.dart';
-import 'package:friendly_card_mobie/widget/loading_page.dart';
+import 'package:friendly_card_mobie/utils/app_color.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
@@ -39,15 +34,15 @@ class HomePage extends StatelessWidget {
             ),
           ],
           currentIndex: mainController.currentPage.value,
-          selectedItemColor: const Color(0xFF4169E1), // Royal Blue
+          selectedItemColor: AppColor.royalBlue,
           unselectedItemColor: Colors.grey,
           onTap: (value) async {
             mainController.currentPage.value = value;
-            if (value == 0) {
-              await mainController.loadData();
-            }
+            // if (value == 0) {
+            //   await mainController.loadData();
+            // }
           },
-          type: BottomNavigationBarType.fixed, // Giữ vị trí cố định
+          type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
           elevation: 8.0,
         ),

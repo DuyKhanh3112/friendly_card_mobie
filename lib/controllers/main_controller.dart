@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:friendly_card_mobie/controllers/study_history_controller.dart';
 import 'package:friendly_card_mobie/controllers/topic_controller.dart';
 import 'package:friendly_card_mobie/views/screens/home_screen.dart';
+import 'package:friendly_card_mobie/views/screens/topic_screen.dart';
 import 'package:get/get.dart';
 
 class MainController extends GetxController {
@@ -10,7 +11,7 @@ class MainController extends GetxController {
 
   List<Widget> pages = [
     HomeScreen(),
-    HomeScreen(),
+    TopicScreen(),
     HomeScreen(),
     HomeScreen(),
   ];

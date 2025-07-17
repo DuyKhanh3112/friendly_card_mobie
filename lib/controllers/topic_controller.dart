@@ -13,6 +13,38 @@ class TopicController extends GetxController {
   CollectionReference topicCollection =
       FirebaseFirestore.instance.collection('topic');
 
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   topicCollection
+  //       // .where('status', isEqualTo: 'active')
+  //       .snapshots()
+  //       .listen((snapshot) async {
+  //     for (var item in snapshot.docChanges) {
+  //       Map<String, dynamic> data = item.doc.data() as Map<String, dynamic>;
+  //       data['id'] = item.doc.id;
+  //       var topicItem = Topic.fromJson(data);
+  //       if (topicItem.status == 'active') {
+  //         await Get.find<VocabularyController>()
+  //             .loadVocabularyTopic(topicItem.id);
+  //         if (Get.find<VocabularyController>()
+  //             .listVocabulary
+  //             .value
+  //             .where((voca) => voca.topic_id == item.doc.id)
+  //             .isNotEmpty) {
+  //           listTopics.value.add(Topic.fromJson(data));
+  //         }
+  //       } else {
+  //         listTopics.value.removeWhere((t) => t.id == topicItem.id);
+  //         Get.find<VocabularyController>()
+  //             .listVocabulary
+  //             .value
+  //             .where((voca) => voca.id == topicItem.id);
+  //       }
+  //     }
+  //   });
+  // }
+
   RxList<Topic> listTopics = <Topic>[].obs;
   UsersController usersController = Get.find<UsersController>();
 
@@ -76,5 +108,18 @@ class TopicController extends GetxController {
       }
     }
     return listContinute;
+  }
+
+  void listenUpdateToTopic() {
+    topicCollection
+        .where('status', isEqualTo: 'active')
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
+      listTopics.value = snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return Topic.fromJson(data);
+      }).toList();
+    });
   }
 }

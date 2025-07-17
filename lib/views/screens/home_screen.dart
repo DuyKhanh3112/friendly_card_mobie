@@ -1,14 +1,15 @@
-// ignore_for_file: invalid_use_of_protected_member, sized_box_for_whitespace
+// ignore_for_file: invalid_use_of_protected_member, sized_box_for_whitespace, deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:friendly_card_mobie/components/custom_button.dart';
 import 'package:friendly_card_mobie/controllers/main_controller.dart';
 import 'package:friendly_card_mobie/controllers/study_history_controller.dart';
 import 'package:friendly_card_mobie/controllers/topic_controller.dart';
 import 'package:friendly_card_mobie/controllers/users_controller.dart';
 import 'package:friendly_card_mobie/controllers/vocabulary_controller.dart';
-import 'package:friendly_card_mobie/models/study_history.dart';
 import 'package:friendly_card_mobie/models/topic.dart';
-import 'package:friendly_card_mobie/models/vocabulary.dart';
+import 'package:friendly_card_mobie/utils/app_color.dart';
+import 'package:friendly_card_mobie/widget/header.dart';
 import 'package:friendly_card_mobie/widget/loading_page.dart';
 import 'package:get/get.dart';
 
@@ -18,73 +19,85 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MainController mainController = Get.find<MainController>();
-    StudyHistoryController studyHistoryController =
-        Get.find<StudyHistoryController>();
     return Obx(() {
-      return mainController.loading.value ||
-              studyHistoryController.loading.value
+      return mainController.loading.value
           ? LoadingPage()
           : SafeArea(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 16.0),
-                children: const [
-                  HeaderHomeWidget(),
-                  // SizedBox(height: 24),
-                  MainFeaturesWidget(),
-                  // SizedBox(height: 30),
-                  DailyGoalWidget(),
-                  // SizedBox(height: 30),
-                  ContinueLearningWidget(),
-                  // SizedBox(height: 30),
-                  SugguestTopicsWidget(),
-                ],
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Get.width * 0.03,
+                  vertical: Get.height * 0.02,
+                ),
+                child: Column(
+                  // padding: EdgeInsets.symmetric(
+                  //   horizontal: Get.width * 0.03,
+                  //   vertical: Get.height * 0.02,
+                  // ),
+                  children: [
+                    HeaderWidget(),
+                    Expanded(
+                      child: ListView(
+                        children: [
+                          MainFeaturesWidget(),
+                          DailyGoalWidget(),
+                          ContinueLearningWidget(),
+                          SugguestTopicsWidget(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
     });
   }
 }
 
-class HeaderHomeWidget extends StatelessWidget {
-  const HeaderHomeWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    UsersController usersController = Get.find<UsersController>();
-    return Obx(() {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Hello, ${usersController.user.value.fullname}!',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF00008B), // Dark Blue
-                    ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                "Let's start the day with some vocabulary!",
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.black54,
-                    ),
-              ),
-            ],
-          ),
-          const CircleAvatar(
-            radius: 28,
-            backgroundImage: NetworkImage(
-                'https://res.cloudinary.com/drir6xyuq/image/upload/v1749203203/logo_icon.png'), // Ảnh đại diện mẫu
-            backgroundColor: Colors.transparent,
-          ),
-        ],
-      );
-    });
-  }
-}
+// class HeaderHomeWidget extends StatelessWidget {
+//   const HeaderHomeWidget({super.key});
+//   @override
+//   Widget build(BuildContext context) {
+//     UsersController usersController = Get.find<UsersController>();
+//     return Obx(() {
+//       return Container(
+//         padding: EdgeInsets.only(
+//           bottom: Get.height * 0.02,
+//         ),
+//         decoration: BoxDecoration(),
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   'Hello, ${usersController.user.value.fullname}!',
+//                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
+//                         fontWeight: FontWeight.bold,
+//                         color: AppColor.drakBlue, // Dark Blue
+//                       ),
+//                 ),
+//                 const SizedBox(height: 4),
+//                 Text(
+//                   "Let's start the day with some vocabulary!",
+//                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+//                         color: Colors.black54,
+//                       ),
+//                 ),
+//               ],
+//             ),
+//             const CircleAvatar(
+//               radius: 28,
+//               backgroundImage: NetworkImage(
+//                   'https://res.cloudinary.com/drir6xyuq/image/upload/v1749203203/logo_icon.png'), // Ảnh đại diện mẫu
+//               backgroundColor: Colors.transparent,
+//             ),
+//           ],
+//         ),
+//       );
+//     });
+//   }
+// }
 
 class DailyGoalWidget extends StatelessWidget {
   const DailyGoalWidget({super.key});
@@ -96,7 +109,35 @@ class DailyGoalWidget extends StatelessWidget {
         Get.find<StudyHistoryController>();
     return Obx(() {
       return usersController.user.value.daily_goal == 0
-          ? SizedBox()
+          ? Card(
+              elevation: 4.0,
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(Get.width * 0.05),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: Get.width * 0.5,
+                      child: Text(
+                        'Vui lòng đặt mục tiêu số từ vựng học mỗi ngày.',
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                ),
+                      ),
+                    ),
+                    Container(
+                        width: Get.width * 0.3,
+                        child: CustomButton(title: 'Đặt mục tiêu'))
+                  ],
+                ),
+              ),
+            )
           : Card(
               elevation: 4.0,
               color: Colors.white,
@@ -104,7 +145,7 @@ class DailyGoalWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.0),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(Get.width * 0.05),
                 child: Row(
                   children: [
                     SizedBox(
@@ -117,10 +158,9 @@ class DailyGoalWidget extends StatelessWidget {
                             value: studyHistoryController.countStudyToday() /
                                 usersController.user.value.daily_goal,
                             strokeWidth: 8.0,
-                            backgroundColor: const Color(0xFF87CEEB)
-                                .withOpacity(0.3), // Sky Blue nhạt
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                                Color(0xFF4169E1)), // Royal Blue
+                            backgroundColor: AppColor.skyBlue,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColor.royalBlue),
                           ),
                           Center(
                             child: Text(
@@ -130,7 +170,7 @@ class DailyGoalWidget extends StatelessWidget {
                                   .titleMedium
                                   ?.copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: const Color(0xFF00008B),
+                                    color: AppColor.drakBlue,
                                   ),
                             ),
                           ),
@@ -146,10 +186,9 @@ class DailyGoalWidget extends StatelessWidget {
                             'Mục tiêu hôm nay',
                             style: Theme.of(context)
                                 .textTheme
-                                .titleLarge
+                                .bodyMedium
                                 ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF00008B),
+                                  color: Colors.black54,
                                 ),
                           ),
                           SizedBox(height: Get.height * 0.01),
@@ -203,18 +242,17 @@ class MainFeaturesWidget extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: const Color(0xFF4169E1).withOpacity(0.1), // Royal Blue nhạt
+            color: AppColor.royalBlue.withOpacity(0.1),
             borderRadius: BorderRadius.circular(16),
           ),
-          child: Icon(icon,
-              color: const Color(0xFF4169E1), size: 30), // Royal Blue
+          child: Icon(icon, color: AppColor.royalBlue, size: 30),
         ),
         const SizedBox(height: 8),
         Text(
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: const Color(0xFF00008B),
+                color: AppColor.drakBlue,
               ),
         ),
       ],
@@ -238,6 +276,13 @@ class ContinueLearningWidget extends StatelessWidget {
               .where((voca) => voca.is_studied && voca.topic_id == topic.id)
               .isNotEmpty)
           .toList();
+      listContinute.value.sort((b, a) =>
+          vocabularyController.listVocabulary.value
+              .where((voca) => voca.topic_id == a.id && voca.is_studied)
+              .length -
+          vocabularyController.listVocabulary.value
+              .where((voca) => voca.topic_id == b.id && voca.is_studied)
+              .length);
       return listContinute.value.isEmpty
           ? SizedBox()
           : Container(
@@ -251,7 +296,7 @@ class ContinueLearningWidget extends StatelessWidget {
                     'Tiếp tục học nào!',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF00008B),
+                          color: AppColor.drakBlue,
                         ),
                   ),
                   const SizedBox(height: 16),
@@ -319,7 +364,7 @@ class ContinueLearningWidget extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      topic.name,
+                      topic.name.toUpperCase(),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -373,7 +418,7 @@ class SugguestTopicsWidget extends StatelessWidget {
                     'Chủ đề gợi ý cho bạn',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF00008B),
+                          color: AppColor.drakBlue,
                         ),
                   ),
                   Column(

@@ -2,23 +2,29 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:friendly_card_mobie/controllers/main_controller.dart';
 import 'package:friendly_card_mobie/models/users.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class UsersController extends GetxController {
   RxBool loading = false.obs;
   RxString role = ''.obs;
   Rx<Users> user = Users.initUser().obs;
 
-  CollectionReference usersCollection = FirebaseFirestore.instance.collection(
-    'users',
-  );
+  CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
 
-  bool checkLogin() {
-    if (user.value.id == '' ||
-        !['admin', 'teacher'].contains(role.value) ||
-        !user.value.active) {
-      return false;
-    }
-    return true;
+  Future<void> saveSession(String userId) async {
+    final box = GetStorage();
+    box.write('user_id', userId);
+  }
+
+  Future<String?> getSession() async {
+    final box = GetStorage();
+    return box.read('user_id');
+  }
+
+  Future<void> clearSession() async {
+    final box = GetStorage();
+    box.remove('user_id');
   }
 
   Future<bool> login(String uname, String pword) async {
@@ -37,6 +43,7 @@ class UsersController extends GetxController {
       data['id'] = snapshot.docs[0].id;
       user.value = Users.fromJson(data);
       role.value = user.value.role;
+      await saveSession(user.value.id);
       await Get.find<MainController>().loadData();
       loading.value = false;
       Get.toNamed('/');
@@ -46,10 +53,29 @@ class UsersController extends GetxController {
     return false;
   }
 
+  Future<void> loginSession() async {
+    loading.value = true;
+    user.value = Users.initUser();
+    var userId = await getSession();
+    final snapshot = await usersCollection.doc(userId).get();
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+      data['id'] = snapshot.id;
+      user.value = Users.fromJson(data);
+      role.value = user.value.role;
+      await saveSession(user.value.id);
+      await Get.find<MainController>().loadData();
+      loading.value = false;
+      Get.toNamed('/');
+    }
+    loading.value = false;
+  }
+
   Future<void> logout() async {
     loading.value = true;
     user.value = Users.initUser();
     role.value = '';
+    await clearSession();
     Get.toNamed('/login');
     loading.value = false;
   }

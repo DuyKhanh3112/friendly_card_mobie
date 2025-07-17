@@ -13,5 +13,12 @@ class InitalBinding extends Bindings {
     Get.put(TopicController());
     Get.put(VocabularyController());
     Get.put(StudyHistoryController());
+    // print(await Get.find<UsersController>().getSession());
+    // print('====');
+    if (await Get.find<UsersController>().getSession() == null) {
+      Get.toNamed('/login');
+    } else {
+      await Get.find<UsersController>().loginSession();
+    }
   }
 }

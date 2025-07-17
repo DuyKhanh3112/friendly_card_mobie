@@ -44,36 +44,6 @@ class Users {
       daily_goal: 0,
     );
   }
-  factory Users.initLearner() {
-    return Users(
-      id: '',
-      username: '',
-      password: '',
-      fullname: '',
-      update_at: Timestamp.now(),
-      role: 'learner',
-      email: '',
-      phone: '',
-      avatar: '',
-      active: true,
-      daily_goal: 0,
-    );
-  }
-  factory Users.initTeacher() {
-    return Users(
-      id: '',
-      username: '',
-      password: '',
-      fullname: '',
-      update_at: Timestamp.now(),
-      role: 'teacher',
-      email: '',
-      phone: '',
-      avatar: '',
-      active: true,
-      daily_goal: 0,
-    );
-  }
 
   static Users fromJson(Map<String, dynamic> json) {
     return Users(

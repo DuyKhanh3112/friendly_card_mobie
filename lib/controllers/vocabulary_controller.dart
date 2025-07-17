@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:friendly_card_mobie/controllers/study_history_controller.dart';
 import 'package:friendly_card_mobie/controllers/users_controller.dart';
-import 'package:friendly_card_mobie/models/topic.dart';
 import 'package:friendly_card_mobie/models/vocabulary.dart';
 import 'package:get/get.dart';
 
@@ -33,6 +32,7 @@ class VocabularyController extends GetxController {
           await Get.find<StudyHistoryController>().checkStudied(item.id);
       listVocabulary.value.add(Vocabulary.fromJson(data));
     }
+    // listVocabulary.value.sort((a, b) => a.update_at.toDate().compareTo(b.update_at.toDate()));
     loading.value = false;
   }
 }
