@@ -2,7 +2,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:friendly_card_mobie/controllers/study_history_controller.dart';
-import 'package:friendly_card_mobie/controllers/users_controller.dart';
 import 'package:friendly_card_mobie/controllers/vocabulary_controller.dart';
 import 'package:friendly_card_mobie/models/study_history.dart';
 import 'package:friendly_card_mobie/models/topic.dart';

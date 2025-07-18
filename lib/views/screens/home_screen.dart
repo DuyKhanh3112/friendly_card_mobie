@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member, sized_box_for_whitespace, deprecated_member_use
+// ignore_for_file: invalid_use_of_protected_member, sized_box_for_whitespace, deprecated_member_use, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
 import 'package:friendly_card_mobie/components/custom_button.dart';
@@ -330,25 +330,32 @@ class MainFeaturesWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildFeatureItem(context, Icons.book_rounded, 'Chủ đề'),
-          _buildFeatureItem(context, Icons.style_rounded, 'Ôn tập'),
-          _buildFeatureItem(context, Icons.gamepad_rounded, 'Luyện tập'),
-          _buildFeatureItem(context, Icons.star_rounded, 'Từ của bạn'),
+          // _buildFeatureItem(context, Icons.book_rounded, 'Chủ đề'),
+          _buildFeatureItem(
+              context, Icons.style_rounded, 'Học từ vựng', () async {}),
+          _buildFeatureItem(
+              context, Icons.gamepad_rounded, 'Luyện tập', () async {}),
+          _buildFeatureItem(
+              context, Icons.bar_chart_rounded, 'Thống kê', () async {}),
         ],
       ),
     );
   }
 
-  Widget _buildFeatureItem(BuildContext context, IconData icon, String label) {
+  Widget _buildFeatureItem(BuildContext context, IconData icon, String label,
+      Future<void> Function() onclick) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColor.royalBlue.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(16),
+        InkWell(
+          onTap: onclick,
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColor.royalBlue.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(icon, color: AppColor.royalBlue, size: 30),
           ),
-          child: Icon(icon, color: AppColor.royalBlue, size: 30),
         ),
         const SizedBox(height: 8),
         Text(

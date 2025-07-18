@@ -1,7 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member, deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:friendly_card_mobie/controllers/main_controller.dart';
 import 'package:friendly_card_mobie/controllers/topic_controller.dart';
 import 'package:friendly_card_mobie/controllers/vocabulary_controller.dart';
 import 'package:friendly_card_mobie/models/topic.dart';
@@ -17,7 +16,6 @@ class TopicScreen extends StatelessWidget {
     TopicController topicController = Get.find<TopicController>();
     VocabularyController vocabularyController =
         Get.find<VocabularyController>();
-    MainController mainController = Get.find<MainController>();
 
     RxList<Topic> listTopic = <Topic>[].obs;
 
@@ -31,7 +29,7 @@ class TopicScreen extends StatelessWidget {
               .where((voca) => voca.topic_id == b.id && voca.is_studied)
               .length);
 
-      return mainController.loading.value
+      return topicController.loading.value
           ? LoadingPage()
           : Scaffold(
               body: SafeArea(
@@ -46,7 +44,7 @@ class TopicScreen extends StatelessWidget {
                       Expanded(
                           child: ListView(
                         children: listTopic.value
-                            .map((item) => buildCourseCard(context, item))
+                            .map((item) => buildTopicCard(context, item))
                             .toList(),
                       ))
                     ],
@@ -57,7 +55,7 @@ class TopicScreen extends StatelessWidget {
     });
   }
 
-  Widget buildCourseCard(BuildContext context, Topic topic) {
+  Widget buildTopicCard(BuildContext context, Topic topic) {
     RxInt completed = 0.obs;
     RxInt total = 1.obs;
     return Obx(() {
@@ -85,8 +83,9 @@ class TopicScreen extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: InkWell(
             onTap: () async {
-              Get.find<TopicController>().topic.value = topic;
-              Get.toNamed('/vocabulary');
+              // Get.find<TopicController>().topic.value = topic;
+              // Get.toNamed('/vocabulary');
+              await Get.find<VocabularyController>().gotoAllVocabulary(topic);
             },
             child: Stack(
               alignment: Alignment.bottomLeft,

@@ -21,8 +21,8 @@ class HomePage extends StatelessWidget {
               label: 'Trang chủ',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.book_rounded),
-              label: 'Chủ đề',
+              icon: Icon(Icons.style_rounded),
+              label: 'Từ vựng',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.gamepad_rounded),
@@ -36,6 +36,18 @@ class HomePage extends StatelessWidget {
           currentIndex: mainController.currentPage.value,
           selectedItemColor: AppColor.royalBlue,
           unselectedItemColor: Colors.grey,
+          selectedIconTheme: IconThemeData(
+            color: AppColor.royalBlue,
+            size: 32,
+          ),
+          selectedLabelStyle: TextStyle(
+            color: AppColor.royalBlue,
+            fontWeight: FontWeight.bold,
+          ),
+          unselectedLabelStyle: TextStyle(
+            // color: AppColor.royalBlue,
+            fontWeight: FontWeight.bold,
+          ),
           onTap: (value) async {
             mainController.currentPage.value = value;
             // if (value == 0) {

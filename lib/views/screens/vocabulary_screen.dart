@@ -1,7 +1,6 @@
-// ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: avoid_unnecessary_containers, invalid_use_of_protected_member, sized_box_for_whitespace
 
 import 'package:flip_card/flip_card.dart';
-import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:friendly_card_mobie/components/custom_button.dart';
 import 'package:friendly_card_mobie/controllers/topic_controller.dart';
@@ -20,22 +19,21 @@ class VocabularyScreen extends StatelessWidget {
     VocabularyController vocabularyController =
         Get.find<VocabularyController>();
     TopicController topicController = Get.find<TopicController>();
-    RxList<Vocabulary> listVocabulary = <Vocabulary>[].obs;
-
-    Rx<Vocabulary> vocabulary = Vocabulary.initVocabulary().obs;
-    RxBool isFront = true.obs;
+    // RxBool isFront = true.obs;
 
     RxBool hideVoice = false.obs;
-    listVocabulary.value = vocabularyController.listVocabulary.value
-        .where((voca) =>
-            !voca.is_studied && voca.topic_id == topicController.topic.value.id)
-        .toList();
-    RxInt currentIndex = 0.obs;
     GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
-    // Rx<FlipCardController> flip_card_controller = FlipCardController().obs;
+
+    RxBool canBack = false.obs;
+    RxBool canContinute = false.obs;
     return Obx(() {
-      // print(cardKey)
-      vocabulary.value = listVocabulary.value[currentIndex.value];
+      canBack.value = !(vocabularyController.listStudied.value.first.id ==
+          vocabularyController.vocabulary.value.id);
+      canContinute.value = !(vocabularyController.listVocaAllow.value.isEmpty &&
+          (vocabularyController.listStudied.value.lastOrNull ??
+                      Vocabulary.initVocabulary())
+                  .id ==
+              vocabularyController.vocabulary.value.id);
       return vocabularyController.loading.value
           ? LoadingPage()
           : Scaffold(
@@ -59,82 +57,76 @@ class VocabularyScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      listVocabulary.value.isEmpty
-                          ? SizedBox()
-                          : Center(
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  FlipCard(
-                                    key: cardKey,
-                                    // controller: flip_card_controller.value,
-                                    flipOnTouch: true,
-                                    onFlipDone: (value) {
-                                      hideVoice.value = false;
-                                    },
-                                    onFlip: () async {
-                                      hideVoice.value = true;
-                                    },
-                                    front: Container(
-                                      child: frontCard(
-                                          vocabulary.value, isFront, context),
-                                    ),
-                                    back: Container(
-                                      child: backCard(
-                                          vocabulary.value, isFront, context),
-                                    ),
-                                  ),
-                                  hideVoice.value
-                                      ? SizedBox()
-                                      : InkWell(
-                                          onTap: () async {
-                                            await Tool.textToSpeak(
-                                                vocabulary.value.name);
-                                          },
-                                          child: Container(
-                                            margin: EdgeInsets.all(
-                                                Get.width * 0.02),
-                                            child: Icon(
-                                              Icons.volume_down_alt,
-                                              size: 32,
-                                            ),
-                                          ),
-                                        ),
-                                ],
+                      Center(
+                        child: Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            FlipCard(
+                              key: cardKey,
+                              flipOnTouch: true,
+                              onFlipDone: (value) {
+                                hideVoice.value = false;
+                              },
+                              onFlip: () async {
+                                hideVoice.value = true;
+                              },
+                              front: Container(
+                                child: frontCard(context),
+                              ),
+                              back: Container(
+                                child: backCard(context),
                               ),
                             ),
+                            hideVoice.value
+                                ? SizedBox()
+                                : InkWell(
+                                    onTap: () async {
+                                      await Tool.textToSpeak(
+                                          Get.find<VocabularyController>()
+                                              .vocabulary
+                                              .value
+                                              .name);
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.all(Get.width * 0.02),
+                                      child: Icon(
+                                        Icons.volume_down_alt,
+                                        size: 32,
+                                      ),
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            width: Get.width * 0.3,
-                            child: CustomButton(
-                              title: 'Trước',
-                              onClicked: currentIndex > 0
-                                  ? () async {
-                                      // vocabulary.value = listVocabulary[1];
-                                      currentIndex.value =
-                                          currentIndex.value - 1;
+                          !canBack.value
+                              ? SizedBox()
+                              : Container(
+                                  width: Get.width * 0.3,
+                                  child: CustomButton(
+                                    title: 'Trước',
+                                    onClicked: () async {
                                       cardKey = GlobalKey<FlipCardState>();
-                                    }
-                                  : null,
-                            ),
-                          ),
-                          Container(
-                            width: Get.width * 0.3,
-                            child: CustomButton(
-                              title: 'Tiếp theo',
-                              onClicked:
-                                  currentIndex < listVocabulary.value.length - 1
-                                      ? () async {
-                                          // vocabulary.value = listVocabulary[1];
-                                          currentIndex.value =
-                                              currentIndex.value + 1;
-                                          cardKey = GlobalKey<FlipCardState>();
-                                        }
-                                      : null,
-                            ),
-                          ),
+                                      await vocabularyController
+                                          .backVocabulary();
+                                    },
+                                  ),
+                                ),
+                          !canContinute.value
+                              ? SizedBox()
+                              : Container(
+                                  width: Get.width * 0.3,
+                                  child: CustomButton(
+                                    title: 'Tiếp theo',
+                                    onClicked: () async {
+                                      cardKey = GlobalKey<FlipCardState>();
+                                      await vocabularyController
+                                          .continuteVocabulary();
+                                    },
+                                  ),
+                                ),
                         ],
                       ),
                     ],
@@ -145,8 +137,7 @@ class VocabularyScreen extends StatelessWidget {
     });
   }
 
-  Widget frontCard(
-      Vocabulary vocabulary, RxBool isFront, BuildContext context) {
+  Widget frontCard(BuildContext context) {
     return Card(
       elevation: 8,
       clipBehavior: Clip.antiAlias,
@@ -161,7 +152,7 @@ class VocabularyScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.network(
-              vocabulary.image,
+              Get.find<VocabularyController>().vocabulary.value.image,
               width: Get.width,
               height: Get.height * 0.4,
               fit: BoxFit.cover,
@@ -175,7 +166,7 @@ class VocabularyScreen extends StatelessWidget {
                 child: ListView(
                   children: [
                     Text(
-                      vocabulary.name,
+                      Get.find<VocabularyController>().vocabulary.value.name,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
@@ -184,7 +175,10 @@ class VocabularyScreen extends StatelessWidget {
                           ),
                     ),
                     Text(
-                      vocabulary.transcription,
+                      Get.find<VocabularyController>()
+                          .vocabulary
+                          .value
+                          .transcription,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             // fontWeight:
@@ -195,7 +189,7 @@ class VocabularyScreen extends StatelessWidget {
                           ),
                     ),
                     Text(
-                      'Example: ${vocabulary.example}',
+                      'Example: ${Get.find<VocabularyController>().vocabulary.value.example}',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
@@ -229,7 +223,7 @@ class VocabularyScreen extends StatelessWidget {
     );
   }
 
-  Widget backCard(Vocabulary vocabulary, RxBool isFront, BuildContext context) {
+  Widget backCard(BuildContext context) {
     return Card(
       elevation: 8,
       clipBehavior: Clip.antiAlias,
@@ -244,7 +238,7 @@ class VocabularyScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.network(
-              vocabulary.image,
+              Get.find<VocabularyController>().vocabulary.value.image,
               width: Get.width,
               height: Get.height * 0.4,
               fit: BoxFit.cover,
@@ -258,7 +252,7 @@ class VocabularyScreen extends StatelessWidget {
                 child: ListView(
                   children: [
                     Text(
-                      vocabulary.mean,
+                      Get.find<VocabularyController>().vocabulary.value.mean,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
@@ -278,7 +272,7 @@ class VocabularyScreen extends StatelessWidget {
                           ),
                     ),
                     Text(
-                      'Ví dụ: ${vocabulary.mean_example}',
+                      'Ví dụ: ${Get.find<VocabularyController>().vocabulary.value.mean_example}',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,

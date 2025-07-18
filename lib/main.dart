@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, unused_import
+// ignore_for_file: depend_on_referenced_packages, unused_import, await_only_futures
 
 import 'dart:async';
 import 'dart:developer';
@@ -16,6 +16,7 @@ import 'package:friendly_card_mobie/models/vocabulary.dart';
 import 'package:friendly_card_mobie/utils/inital_binding.dart';
 import 'package:friendly_card_mobie/views/home_page.dart';
 import 'package:friendly_card_mobie/views/login_page.dart';
+import 'package:friendly_card_mobie/views/screens/all_vocabulary_screen.dart';
 import 'package:friendly_card_mobie/views/screens/vocabulary_screen.dart';
 import 'package:get/get.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -126,6 +127,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/',
           page: () => const HomePage(),
+        ),
+        GetPage(
+          name: '/all_vocabulary',
+          page: () => const AllVocabularyScreen(),
         ),
         GetPage(
           name: '/vocabulary',
