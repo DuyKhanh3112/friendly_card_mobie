@@ -1,12 +1,12 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:friendly_card_mobie/controllers/study_history_controller.dart';
-import 'package:friendly_card_mobie/controllers/topic_controller.dart';
-import 'package:friendly_card_mobie/controllers/users_controller.dart';
-import 'package:friendly_card_mobie/models/study_history.dart';
-import 'package:friendly_card_mobie/models/topic.dart';
-import 'package:friendly_card_mobie/models/vocabulary.dart';
+import 'package:friendly_card_mobile/controllers/study_history_controller.dart';
+import 'package:friendly_card_mobile/controllers/topic_controller.dart';
+import 'package:friendly_card_mobile/controllers/users_controller.dart';
+import 'package:friendly_card_mobile/models/study_history.dart';
+import 'package:friendly_card_mobile/models/topic.dart';
+import 'package:friendly_card_mobile/models/vocabulary.dart';
 import 'package:get/get.dart';
 
 class VocabularyController extends GetxController {

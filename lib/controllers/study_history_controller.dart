@@ -1,8 +1,8 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:friendly_card_mobie/controllers/users_controller.dart';
-import 'package:friendly_card_mobie/models/study_history.dart';
+import 'package:friendly_card_mobile/controllers/users_controller.dart';
+import 'package:friendly_card_mobile/models/study_history.dart';
 import 'package:get/get.dart';
 
 class StudyHistoryController extends GetxController {

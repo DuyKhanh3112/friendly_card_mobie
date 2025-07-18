@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloudinary/cloudinary.dart';
-import 'package:friendly_card_mobie/config.dart';
+import 'package:friendly_card_mobile/config.dart';
 
 class CloudinaryController {
   Cloudinary cloudinary = Cloudinary.signedConfig(

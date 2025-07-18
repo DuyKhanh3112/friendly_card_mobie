@@ -1,8 +1,8 @@
 // ignore_for_file: deprecated_member_use, sized_box_for_whitespace, invalid_use_of_protected_member
 
 import 'package:flutter/material.dart';
-import 'package:friendly_card_mobie/controllers/main_controller.dart';
-import 'package:friendly_card_mobie/utils/app_color.dart';
+import 'package:friendly_card_mobile/controllers/main_controller.dart';
+import 'package:friendly_card_mobile/utils/app_color.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {

@@ -1,7 +1,7 @@
 // ignore_for_file: file_names, deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:friendly_card_mobie/utils/app_color.dart';
+import 'package:friendly_card_mobile/utils/app_color.dart';
 import 'package:get/get.dart';
 
 class CustomButton extends StatelessWidget {

@@ -1,8 +1,8 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
-import 'package:friendly_card_mobie/controllers/users_controller.dart';
-import 'package:friendly_card_mobie/utils/app_color.dart';
+import 'package:friendly_card_mobile/controllers/users_controller.dart';
+import 'package:friendly_card_mobile/utils/app_color.dart';
 import 'package:get/get.dart';
 
 class HeaderWidget extends StatelessWidget {
@@ -24,7 +24,7 @@ class HeaderWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Hello, ${usersController.user.value.fullname}!',
+                  'Xin chào, ${usersController.user.value.fullname}!',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColor.drakBlue,
@@ -32,7 +32,7 @@ class HeaderWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "Let's start the day with some vocabulary!",
+                  "Hãy bắt đầu ngày mới với một số từ vựng nhé!",
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.black54,
                       ),

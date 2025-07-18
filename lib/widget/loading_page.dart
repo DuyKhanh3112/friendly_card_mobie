@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:friendly_card_mobie/utils/app_color.dart';
+import 'package:friendly_card_mobile/utils/app_color.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({super.key});

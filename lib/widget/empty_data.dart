@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:friendly_card_mobie/utils/app_color.dart';
+import 'package:friendly_card_mobile/utils/app_color.dart';
 import 'package:get/get.dart';
 
 class EmptyData extends StatelessWidget {

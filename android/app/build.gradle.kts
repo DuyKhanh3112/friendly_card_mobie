@@ -10,7 +10,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.example.friendly_card_mobie"
+    namespace = "com.example.friendly_card_mobile"
     compileSdk = flutter.compileSdkVersion
     // ndkVersion = flutter.ndkVersion
        ndkVersion = "27.0.12077973"

@@ -2,12 +2,12 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:friendly_card_mobie/components/custom_button.dart';
-import 'package:friendly_card_mobie/components/custom_dialog.dart';
-import 'package:friendly_card_mobie/components/custom_text_field.dart';
-import 'package:friendly_card_mobie/controllers/users_controller.dart';
-import 'package:friendly_card_mobie/utils/app_color.dart';
-import 'package:friendly_card_mobie/widget/loading_page.dart';
+import 'package:friendly_card_mobile/components/custom_button.dart';
+import 'package:friendly_card_mobile/components/custom_dialog.dart';
+import 'package:friendly_card_mobile/components/custom_text_field.dart';
+import 'package:friendly_card_mobile/controllers/users_controller.dart';
+import 'package:friendly_card_mobile/utils/app_color.dart';
+import 'package:friendly_card_mobile/widget/loading_page.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {

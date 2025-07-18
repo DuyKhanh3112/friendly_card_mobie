@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:friendly_card_mobie/controllers/main_controller.dart';
-import 'package:friendly_card_mobie/models/users.dart';
+import 'package:friendly_card_mobile/controllers/main_controller.dart';
+import 'package:friendly_card_mobile/models/users.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 

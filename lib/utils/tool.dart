@@ -50,11 +50,11 @@ class Tool {
     return num >= listChar.length ? '' : listChar[num];
   }
 
-  static Future<void> textToSpeak(String text) async {
+  static Future<void> textToSpeak(String text, String language) async {
     FlutterTts flutterTts = FlutterTts();
-    await flutterTts.setLanguage("en-UK"); // hỗ trợ "vi-VN", "en-US", ...
-    await flutterTts.setPitch(1.0); // 0.5 - 2.0
-    await flutterTts.setSpeechRate(0.25); // 0.0 - 1.0
+    await flutterTts.setLanguage(language); // hỗ trợ "vi-VN", "en-US", ...
+    await flutterTts.setPitch(1); // 0.5 - 2.0
+    await flutterTts.setSpeechRate(0.5); // 0.0 - 1.0
     await flutterTts.setVolume(1.0); // 0.0 - 1.0
     await flutterTts.speak(text);
   }

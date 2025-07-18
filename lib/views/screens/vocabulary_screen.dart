@@ -2,13 +2,13 @@
 
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import 'package:friendly_card_mobie/components/custom_button.dart';
-import 'package:friendly_card_mobie/controllers/topic_controller.dart';
-import 'package:friendly_card_mobie/controllers/vocabulary_controller.dart';
-import 'package:friendly_card_mobie/models/vocabulary.dart';
-import 'package:friendly_card_mobie/utils/app_color.dart';
-import 'package:friendly_card_mobie/utils/tool.dart';
-import 'package:friendly_card_mobie/widget/loading_page.dart';
+import 'package:friendly_card_mobile/components/custom_button.dart';
+import 'package:friendly_card_mobile/controllers/topic_controller.dart';
+import 'package:friendly_card_mobile/controllers/vocabulary_controller.dart';
+import 'package:friendly_card_mobile/models/vocabulary.dart';
+import 'package:friendly_card_mobile/utils/app_color.dart';
+import 'package:friendly_card_mobile/utils/tool.dart';
+import 'package:friendly_card_mobile/widget/loading_page.dart';
 import 'package:get/get.dart';
 
 class VocabularyScreen extends StatelessWidget {
@@ -19,7 +19,7 @@ class VocabularyScreen extends StatelessWidget {
     VocabularyController vocabularyController =
         Get.find<VocabularyController>();
     TopicController topicController = Get.find<TopicController>();
-    // RxBool isFront = true.obs;
+    RxBool isFront = true.obs;
 
     RxBool hideVoice = false.obs;
     GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
@@ -66,6 +66,7 @@ class VocabularyScreen extends StatelessWidget {
                               flipOnTouch: true,
                               onFlipDone: (value) {
                                 hideVoice.value = false;
+                                isFront.value = !isFront.value;
                               },
                               onFlip: () async {
                                 hideVoice.value = true;
@@ -82,10 +83,16 @@ class VocabularyScreen extends StatelessWidget {
                                 : InkWell(
                                     onTap: () async {
                                       await Tool.textToSpeak(
-                                          Get.find<VocabularyController>()
-                                              .vocabulary
-                                              .value
-                                              .name);
+                                          isFront.value
+                                              ? Get.find<VocabularyController>()
+                                                  .vocabulary
+                                                  .value
+                                                  .name
+                                              : Get.find<VocabularyController>()
+                                                  .vocabulary
+                                                  .value
+                                                  .mean,
+                                          isFront.value ? 'en-US' : 'vi-VN');
                                     },
                                     child: Container(
                                       margin: EdgeInsets.all(Get.width * 0.02),
@@ -109,6 +116,7 @@ class VocabularyScreen extends StatelessWidget {
                                     title: 'Trước',
                                     onClicked: () async {
                                       cardKey = GlobalKey<FlipCardState>();
+                                      isFront.value = true;
                                       await vocabularyController
                                           .backVocabulary();
                                     },
@@ -122,6 +130,7 @@ class VocabularyScreen extends StatelessWidget {
                                     title: 'Tiếp theo',
                                     onClicked: () async {
                                       cardKey = GlobalKey<FlipCardState>();
+                                      isFront.value = true;
                                       await vocabularyController
                                           .continuteVocabulary();
                                     },

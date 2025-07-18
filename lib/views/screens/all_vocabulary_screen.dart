@@ -1,11 +1,11 @@
 // ignore_for_file: invalid_use_of_protected_member, deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:friendly_card_mobie/controllers/topic_controller.dart';
-import 'package:friendly_card_mobie/controllers/vocabulary_controller.dart';
-import 'package:friendly_card_mobie/models/vocabulary.dart';
-import 'package:friendly_card_mobie/utils/app_color.dart';
-import 'package:friendly_card_mobie/widget/loading_page.dart';
+import 'package:friendly_card_mobile/controllers/topic_controller.dart';
+import 'package:friendly_card_mobile/controllers/vocabulary_controller.dart';
+import 'package:friendly_card_mobile/models/vocabulary.dart';
+import 'package:friendly_card_mobile/utils/app_color.dart';
+import 'package:friendly_card_mobile/widget/loading_page.dart';
 import 'package:get/get.dart';
 import 'package:flexible_grid_view/flexible_grid_view.dart';
 

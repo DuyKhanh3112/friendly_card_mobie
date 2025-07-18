@@ -1,17 +1,17 @@
 // ignore_for_file: invalid_use_of_protected_member, sized_box_for_whitespace, deprecated_member_use, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
-import 'package:friendly_card_mobie/components/custom_button.dart';
-import 'package:friendly_card_mobie/components/custom_text_field.dart';
-import 'package:friendly_card_mobie/controllers/main_controller.dart';
-import 'package:friendly_card_mobie/controllers/study_history_controller.dart';
-import 'package:friendly_card_mobie/controllers/topic_controller.dart';
-import 'package:friendly_card_mobie/controllers/users_controller.dart';
-import 'package:friendly_card_mobie/controllers/vocabulary_controller.dart';
-import 'package:friendly_card_mobie/models/topic.dart';
-import 'package:friendly_card_mobie/utils/app_color.dart';
-import 'package:friendly_card_mobie/widget/header.dart';
-import 'package:friendly_card_mobie/widget/loading_page.dart';
+import 'package:friendly_card_mobile/components/custom_button.dart';
+import 'package:friendly_card_mobile/components/custom_text_field.dart';
+import 'package:friendly_card_mobile/controllers/main_controller.dart';
+import 'package:friendly_card_mobile/controllers/study_history_controller.dart';
+import 'package:friendly_card_mobile/controllers/topic_controller.dart';
+import 'package:friendly_card_mobile/controllers/users_controller.dart';
+import 'package:friendly_card_mobile/controllers/vocabulary_controller.dart';
+import 'package:friendly_card_mobile/models/topic.dart';
+import 'package:friendly_card_mobile/utils/app_color.dart';
+import 'package:friendly_card_mobile/widget/header.dart';
+import 'package:friendly_card_mobile/widget/loading_page.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -41,6 +41,7 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           MainFeaturesWidget(),
                           DailyGoalWidget(),
+                          CompletedWidget(),
                           ContinueLearningWidget(),
                           SugguestTopicsWidget(),
                         ],
@@ -331,10 +332,14 @@ class MainFeaturesWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           // _buildFeatureItem(context, Icons.book_rounded, 'Chủ đề'),
-          _buildFeatureItem(
-              context, Icons.style_rounded, 'Học từ vựng', () async {}),
-          _buildFeatureItem(
-              context, Icons.gamepad_rounded, 'Luyện tập', () async {}),
+          _buildFeatureItem(context, Icons.style_rounded, 'Học từ vựng',
+              () async {
+            Get.find<MainController>().currentPage.value = 1;
+          }),
+          _buildFeatureItem(context, Icons.gamepad_rounded, 'Luyện tập',
+              () async {
+            Get.find<MainController>().currentPage.value = 2;
+          }),
           _buildFeatureItem(
               context, Icons.bar_chart_rounded, 'Thống kê', () async {}),
         ],
@@ -370,6 +375,153 @@ class MainFeaturesWidget extends StatelessWidget {
   }
 }
 
+class CompletedWidget extends StatelessWidget {
+  const CompletedWidget({super.key});
+  @override
+  Widget build(BuildContext context) {
+    TopicController topicController = Get.find<TopicController>();
+    VocabularyController vocabularyController =
+        Get.find<VocabularyController>();
+
+    RxList<Topic> listContinute = <Topic>[].obs;
+
+    return Obx(() {
+      listContinute.value = topicController.listTopics.value
+          .where((topic) =>
+              vocabularyController.listVocabulary
+                  .where((voca) => voca.is_studied && voca.topic_id == topic.id)
+                  .length ==
+              vocabularyController.listVocabulary
+                  .where((voca) => voca.topic_id == topic.id)
+                  .length)
+          .toList();
+      // listContinute.value = topicController.listTopics.value
+      //     .where((topic) => vocabularyController.listVocabulary
+      //         .where((voca) => voca.is_studied && voca.topic_id == topic.id)
+      //         .isNotEmpty)
+      //     .toList();
+      // listContinute.value.sort((b, a) =>
+      //     vocabularyController.listVocabulary.value
+      //         .where((voca) => voca.topic_id == a.id && voca.is_studied)
+      //         .length -
+      //     vocabularyController.listVocabulary.value
+      //         .where((voca) => voca.topic_id == b.id && voca.is_studied)
+      //         .length);
+      return listContinute.value.isEmpty
+          ? SizedBox()
+          : Container(
+              margin: EdgeInsets.symmetric(
+                vertical: Get.height * 0.03,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Đã hoàn thành!',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.drakBlue,
+                        ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: Get.height * 0.2,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: listContinute.value
+                          .map((item) => _buildCourseCard(context, item))
+                          .toList(),
+                    ),
+                  ),
+                ],
+              ),
+            );
+    });
+  }
+
+  Widget _buildCourseCard(BuildContext context, Topic topic) {
+    RxInt total = 1.obs;
+    return Obx(() {
+      total.value = Get.find<VocabularyController>()
+          .listVocabulary
+          .value
+          .where((voca) => voca.topic_id == topic.id)
+          .length;
+      return Container(
+        width: Get.width * 0.75,
+        // height: Get.height * 0.25,
+        child: InkWell(
+          onTap: () async {
+            await Get.find<VocabularyController>().gotoAllVocabulary(topic);
+          },
+          child: Card(
+            elevation: 2.0,
+            clipBehavior: Clip.antiAlias,
+            margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                Image.network(
+                  topic.image,
+                  width: Get.width * 0.75,
+                  fit: BoxFit.cover,
+                ),
+                // Lớp phủ màu đen mờ để chữ nổi bật
+                Container(
+                  height: Get.height * 0.15,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.7)
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        topic.name.toUpperCase(),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                      ),
+                      Text(
+                        'Đã học ${total.value}/${total.value} từ',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.white70,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      SizedBox(height: Get.height * 0.01),
+                      LinearProgressIndicator(
+                        value: total.value / total.value,
+                        backgroundColor: Colors.white.withOpacity(0.3),
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+  }
+}
+
 class ContinueLearningWidget extends StatelessWidget {
   const ContinueLearningWidget({super.key});
   @override
@@ -382,9 +534,17 @@ class ContinueLearningWidget extends StatelessWidget {
 
     return Obx(() {
       listContinute.value = topicController.listTopics.value
-          .where((topic) => vocabularyController.listVocabulary
-              .where((voca) => voca.is_studied && voca.topic_id == topic.id)
-              .isNotEmpty)
+          .where((topic) =>
+              vocabularyController.listVocabulary
+                  .where((voca) => voca.is_studied && voca.topic_id == topic.id)
+                  .isNotEmpty &&
+              vocabularyController.listVocabulary
+                      .where((voca) =>
+                          voca.is_studied && voca.topic_id == topic.id)
+                      .length <
+                  vocabularyController.listVocabulary
+                      .where((voca) => voca.topic_id == topic.id)
+                      .length)
           .toList();
       listContinute.value.sort((b, a) =>
           vocabularyController.listVocabulary.value
@@ -442,62 +602,71 @@ class ContinueLearningWidget extends StatelessWidget {
       return Container(
         width: Get.width * 0.75,
         // height: Get.height * 0.25,
-        child: Card(
-          elevation: 2.0,
-          clipBehavior: Clip.antiAlias,
-          margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              Image.network(
-                topic.image,
-                width: Get.width * 0.75,
-                fit: BoxFit.cover,
-              ),
-              // Lớp phủ màu đen mờ để chữ nổi bật
-              Container(
-                height: Get.height * 0.15,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+        child: InkWell(
+          onTap: () async {
+            await Get.find<VocabularyController>().gotoAllVocabulary(topic);
+          },
+          child: Card(
+            elevation: 2.0,
+            clipBehavior: Clip.antiAlias,
+            margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                Image.network(
+                  topic.image,
+                  width: Get.width * 0.75,
+                  fit: BoxFit.cover,
+                ),
+                // Lớp phủ màu đen mờ để chữ nổi bật
+                Container(
+                  height: Get.height * 0.15,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.7)
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      topic.name.toUpperCase(),
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                    ),
-                    Text(
-                      'Đã học ${completed.value}/${total.value} từ',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.white70,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    SizedBox(height: Get.height * 0.01),
-                    LinearProgressIndicator(
-                      value: completed.value / total.value,
-                      backgroundColor: Colors.white.withOpacity(0.3),
-                      valueColor:
-                          const AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        topic.name.toUpperCase(),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                      ),
+                      Text(
+                        'Đã học ${completed.value}/${total.value} từ',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.white70,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      SizedBox(height: Get.height * 0.01),
+                      LinearProgressIndicator(
+                        value: completed.value / total.value,
+                        backgroundColor: Colors.white.withOpacity(0.3),
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
@@ -512,7 +681,6 @@ class SugguestTopicsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     TopicController topicController = Get.find<TopicController>();
     RxList<Topic> listSugguest = <Topic>[].obs;
-    // RxList<Vocabulary> listVocabulary= <Vocabulary>[].obs;
     return Obx(() {
       listSugguest.value = topicController.getListTopicSugguest();
       return listSugguest.value.isEmpty
@@ -543,48 +711,53 @@ class SugguestTopicsWidget extends StatelessWidget {
   }
 
   Widget _buildTopicItem(BuildContext context, Topic topic) {
-    return Card(
-      elevation: 2.0,
-      clipBehavior: Clip.antiAlias,
-      margin: EdgeInsets.symmetric(vertical: Get.height * 0.02),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Image.network(
-            topic.image,
-            height: Get.height * 0.25,
-            width: Get.width,
-            fit: BoxFit.cover,
-          ),
-          // Lớp phủ màu đen mờ để chữ nổi bật
-          Container(
-            height: 120,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+    return InkWell(
+      onTap: () async {
+        await Get.find<VocabularyController>().gotoAllVocabulary(topic);
+      },
+      child: Card(
+        elevation: 2.0,
+        clipBehavior: Clip.antiAlias,
+        margin: EdgeInsets.symmetric(vertical: Get.height * 0.02),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: [
+            Image.network(
+              topic.image,
+              height: Get.height * 0.25,
+              width: Get.width,
+              fit: BoxFit.cover,
+            ),
+            // Lớp phủ màu đen mờ để chữ nổi bật
+            Container(
+              height: 120,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  topic.name,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    topic.name,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
