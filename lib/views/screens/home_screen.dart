@@ -111,110 +111,120 @@ class DailyGoalWidget extends StatelessWidget {
         Get.find<StudyHistoryController>();
     return Obx(() {
       return usersController.user.value.daily_goal == 0
-          ? Card(
-              elevation: 4.0,
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0),
+          ? Container(
+              margin: EdgeInsets.symmetric(
+                vertical: Get.height * 0.02,
               ),
-              child: Padding(
-                padding: EdgeInsets.all(Get.width * 0.05),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: Get.width * 0.5,
-                      child: Text(
-                        'Vui lòng đặt mục tiêu số từ vựng học mỗi ngày.',
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColor.royalBlue,
-                                ),
+              child: Card(
+                elevation: 4.0,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(Get.width * 0.05),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: Get.width * 0.5,
+                        child: Text(
+                          'Vui lòng đặt mục tiêu số từ vựng học mỗi ngày.',
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColor.royalBlue,
+                                  ),
+                        ),
                       ),
-                    ),
-                    Container(
-                        width: Get.width * 0.3,
-                        child: CustomButton(
-                          title: 'Đặt mục tiêu',
-                          onClicked: () async {
-                            await updateGoal(context);
-                          },
-                        ))
-                  ],
+                      Container(
+                          width: Get.width * 0.3,
+                          child: CustomButton(
+                            title: 'Đặt mục tiêu',
+                            onClicked: () async {
+                              await updateGoal(context);
+                            },
+                          ))
+                    ],
+                  ),
                 ),
               ),
             )
-          : Card(
-              elevation: 4.0,
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0),
+          : Container(
+              margin: EdgeInsets.symmetric(
+                vertical: Get.height * 0.02,
               ),
-              child: Padding(
-                padding: EdgeInsets.all(Get.width * 0.05),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: Get.width * 0.2,
-                      width: Get.width * 0.2,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          CircularProgressIndicator(
-                            value: studyHistoryController.countStudyToday() /
-                                usersController.user.value.daily_goal,
-                            strokeWidth: 8.0,
-                            backgroundColor: AppColor.skyBlue,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                AppColor.royalBlue),
-                          ),
-                          Center(
-                            child: Text(
-                              '${studyHistoryController.countStudyToday()}/${usersController.user.value.daily_goal}',
+              child: Card(
+                elevation: 4.0,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(Get.width * 0.05),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        height: Get.width * 0.2,
+                        width: Get.width * 0.2,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            CircularProgressIndicator(
+                              value: studyHistoryController.countStudyToday() /
+                                  usersController.user.value.daily_goal,
+                              strokeWidth: 8.0,
+                              backgroundColor: AppColor.skyBlue,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColor.royalBlue),
+                            ),
+                            Center(
+                              child: Text(
+                                '${studyHistoryController.countStudyToday()}/${usersController.user.value.daily_goal}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.drakBlue,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Mục tiêu hôm nay',
                               style: Theme.of(context)
                                   .textTheme
-                                  .titleMedium
+                                  .bodyMedium
                                   ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.drakBlue,
+                                    color: Colors.black54,
                                   ),
                             ),
-                          ),
-                        ],
+                            SizedBox(height: Get.height * 0.01),
+                            Text(
+                              studyHistoryController.listHistory.value.length <
+                                      usersController.user.value.daily_goal
+                                  ? 'Bạn đã gần hoàn thành rồi, cố lên!'
+                                  : 'Chúc mừng bạn đã hoàn thành mục tiêu hàng ngày!',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color: Colors.black54,
+                                  ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Mục tiêu hôm nay',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: Colors.black54,
-                                ),
-                          ),
-                          SizedBox(height: Get.height * 0.01),
-                          Text(
-                            studyHistoryController.listHistory.value.length <
-                                    usersController.user.value.daily_goal
-                                ? 'Bạn đã gần hoàn thành rồi, cố lên!'
-                                : 'Chúc mừng bạn đã hoàn thành mục tiêu hàng ngày!',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: Colors.black54,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
@@ -395,23 +405,11 @@ class CompletedWidget extends StatelessWidget {
                   .where((voca) => voca.topic_id == topic.id)
                   .length)
           .toList();
-      // listContinute.value = topicController.listTopics.value
-      //     .where((topic) => vocabularyController.listVocabulary
-      //         .where((voca) => voca.is_studied && voca.topic_id == topic.id)
-      //         .isNotEmpty)
-      //     .toList();
-      // listContinute.value.sort((b, a) =>
-      //     vocabularyController.listVocabulary.value
-      //         .where((voca) => voca.topic_id == a.id && voca.is_studied)
-      //         .length -
-      //     vocabularyController.listVocabulary.value
-      //         .where((voca) => voca.topic_id == b.id && voca.is_studied)
-      //         .length);
       return listContinute.value.isEmpty
           ? SizedBox()
           : Container(
               margin: EdgeInsets.symmetric(
-                vertical: Get.height * 0.03,
+                vertical: Get.height * 0.02,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -423,13 +421,15 @@ class CompletedWidget extends StatelessWidget {
                           color: AppColor.drakBlue,
                         ),
                   ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    height: Get.height * 0.2,
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: Get.height * 0.01,
+                    ),
+                    height: Get.height * 0.25,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: listContinute.value
-                          .map((item) => _buildCourseCard(context, item))
+                          .map((item) => _buildTopicItem(context, item))
                           .toList(),
                     ),
                   ),
@@ -439,7 +439,7 @@ class CompletedWidget extends StatelessWidget {
     });
   }
 
-  Widget _buildCourseCard(BuildContext context, Topic topic) {
+  Widget _buildTopicItem(BuildContext context, Topic topic) {
     RxInt total = 1.obs;
     return Obx(() {
       total.value = Get.find<VocabularyController>()
@@ -466,11 +466,12 @@ class CompletedWidget extends StatelessWidget {
                 Image.network(
                   topic.image,
                   width: Get.width * 0.75,
+                  height: Get.height * 0.25,
                   fit: BoxFit.cover,
                 ),
                 // Lớp phủ màu đen mờ để chữ nổi bật
                 Container(
-                  height: Get.height * 0.15,
+                  height: Get.height * 0.2,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -557,7 +558,7 @@ class ContinueLearningWidget extends StatelessWidget {
           ? SizedBox()
           : Container(
               margin: EdgeInsets.symmetric(
-                vertical: Get.height * 0.03,
+                vertical: Get.height * 0.02,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -569,13 +570,15 @@ class ContinueLearningWidget extends StatelessWidget {
                           color: AppColor.drakBlue,
                         ),
                   ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    height: Get.height * 0.2,
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: Get.height * 0.01,
+                    ),
+                    height: Get.height * 0.25,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: listContinute.value
-                          .map((item) => _buildCourseCard(context, item))
+                          .map((item) => _buildTopicItem(context, item))
                           .toList(),
                     ),
                   ),
@@ -585,7 +588,7 @@ class ContinueLearningWidget extends StatelessWidget {
     });
   }
 
-  Widget _buildCourseCard(BuildContext context, Topic topic) {
+  Widget _buildTopicItem(BuildContext context, Topic topic) {
     RxInt completed = 0.obs;
     RxInt total = 1.obs;
     return Obx(() {
@@ -618,11 +621,12 @@ class ContinueLearningWidget extends StatelessWidget {
                 Image.network(
                   topic.image,
                   width: Get.width * 0.75,
+                  height: Get.height * 0.25,
                   fit: BoxFit.cover,
                 ),
                 // Lớp phủ màu đen mờ để chữ nổi bật
                 Container(
-                  height: Get.height * 0.15,
+                  height: Get.height * 0.2,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -687,7 +691,7 @@ class SugguestTopicsWidget extends StatelessWidget {
           ? SizedBox()
           : Container(
               margin: EdgeInsets.symmetric(
-                vertical: Get.height * 0.03,
+                vertical: Get.height * 0.02,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -699,10 +703,17 @@ class SugguestTopicsWidget extends StatelessWidget {
                           color: AppColor.drakBlue,
                         ),
                   ),
-                  Column(
-                    children: listSugguest.value
-                        .map((item) => _buildTopicItem(context, item))
-                        .toList(),
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: Get.height * 0.01,
+                    ),
+                    height: Get.height * 0.25,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: listSugguest.value
+                          .map((item) => _buildTopicItem(context, item))
+                          .toList(),
+                    ),
                   ),
                 ],
               ),
@@ -711,54 +722,91 @@ class SugguestTopicsWidget extends StatelessWidget {
   }
 
   Widget _buildTopicItem(BuildContext context, Topic topic) {
-    return InkWell(
-      onTap: () async {
-        await Get.find<VocabularyController>().gotoAllVocabulary(topic);
-      },
-      child: Card(
-        elevation: 2.0,
-        clipBehavior: Clip.antiAlias,
-        margin: EdgeInsets.symmetric(vertical: Get.height * 0.02),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Stack(
-          alignment: Alignment.bottomLeft,
-          children: [
-            Image.network(
-              topic.image,
-              height: Get.height * 0.25,
-              width: Get.width,
-              fit: BoxFit.cover,
-            ),
-            // Lớp phủ màu đen mờ để chữ nổi bật
-            Container(
-              height: 120,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+    RxInt completed = 0.obs;
+    RxInt total = 1.obs;
+    return Obx(() {
+      total.value = Get.find<VocabularyController>()
+          .listVocabulary
+          .value
+          .where((voca) => voca.topic_id == topic.id)
+          .length;
+      completed.value = Get.find<VocabularyController>()
+          .listVocabulary
+          .value
+          .where((voca) => voca.is_studied && voca.topic_id == topic.id)
+          .length;
+      return Container(
+        width: Get.width * 0.75,
+        // height: Get.height * 0.25,
+        child: InkWell(
+          onTap: () async {
+            await Get.find<VocabularyController>().gotoAllVocabulary(topic);
+          },
+          child: Card(
+            elevation: 2.0,
+            clipBehavior: Clip.antiAlias,
+            margin: EdgeInsets.symmetric(horizontal: Get.width * 0.01),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                Image.network(
+                  topic.image,
+                  width: Get.width * 0.75,
+                  height: Get.height * 0.25,
+                  fit: BoxFit.cover,
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    topic.name,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                // Lớp phủ màu đen mờ để chữ nổi bật
+                Container(
+                  height: Get.height * 0.2,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.7)
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        topic.name.toUpperCase(),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                      ),
+                      // Text(
+                      //   'Bắt đầu học',
+                      //   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      //         color: Colors.white70,
+                      //         fontWeight: FontWeight.bold,
+                      //       ),
+                      // ),
+                      // SizedBox(height: Get.height * 0.01),
+                      // LinearProgressIndicator(
+                      //   value: completed.value / total.value,
+                      //   backgroundColor: Colors.white.withOpacity(0.3),
+                      //   valueColor:
+                      //       const AlwaysStoppedAnimation<Color>(Colors.white),
+                      // ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

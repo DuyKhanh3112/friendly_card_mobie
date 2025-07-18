@@ -218,7 +218,7 @@ class VocabularyScreen extends StatelessWidget {
               ),
               alignment: Alignment.center,
               child: Text(
-                'Nhấn vào để lật thẻ',
+                'Click to flip the card',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.bold,

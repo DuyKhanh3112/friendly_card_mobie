@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member, deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:friendly_card_mobile/components/custom_button.dart';
 import 'package:friendly_card_mobile/controllers/topic_controller.dart';
 import 'package:friendly_card_mobile/controllers/vocabulary_controller.dart';
 import 'package:friendly_card_mobile/models/vocabulary.dart';
@@ -36,7 +37,6 @@ class AllVocabularyScreen extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: Get.width * 0.03,
-                    // vertical: Get.height * 0.03,
                   ),
                   child: FlexibleGridView(
                       axisCount: GridLayoutEnum.twoElementsInRow,
@@ -53,6 +53,19 @@ class AllVocabularyScreen extends StatelessWidget {
                       }).toList()),
                 ),
               ),
+              floatingActionButton:
+                  vocabularyController.listStudied.value.isNotEmpty
+                      ? null
+                      : SizedBox(
+                          width: Get.width * 0.925,
+                          child: CustomButton(
+                            title: 'Bắt đầu học',
+                            onClicked: () async {
+                              await vocabularyController
+                                  .startStudy(topicController.topic.value);
+                            },
+                          ),
+                        ),
             );
     });
   }

@@ -33,32 +33,27 @@ class VocabularyController extends GetxController {
     listStudied.value = listVocabulary.value
         .where((voca) => voca.is_studied && voca.topic_id == topic.id)
         .toList();
-    // if (listStudied.isEmpty) {
-    //   await studyVocabulary(listVocaAllow.value.first);
-    //   listStudied.value.add(listVocaAllow.value.first);
-    //   listVocaAllow.value.removeAt(0);
-    // }
-    // vocabulary.value = listStudied.value.last;
     Get.toNamed('/all_vocabulary');
     Get.find<TopicController>().loading.value = false;
   }
 
+  Future<void> startStudy(Topic topic) async {
+    Get.find<TopicController>().loading.value = true;
+    Get.find<TopicController>().topic.value = topic;
+    listVocaAllow.value = listVocabulary.value
+        .where((voca) => !voca.is_studied && voca.topic_id == topic.id)
+        .toList();
+
+    await studyVocabulary(listVocaAllow.value.first);
+    listStudied.value.add(listVocaAllow.value.first);
+    listVocaAllow.value.removeAt(0);
+    vocabulary.value = listStudied.value.last;
+    Get.toNamed('/vocabulary');
+    Get.find<TopicController>().loading.value = false;
+  }
+
   Future<void> gotoVocabulary(Vocabulary voca) async {
-    // Get.find<TopicController>().loading.value = true;
-    // Get.find<TopicController>().topic.value = topic;
-    // listVocaAllow.value = listVocabulary.value
-    //     .where((voca) => !voca.is_studied && voca.topic_id == topic.id)
-    //     .toList();
-    // listStudied.value = listVocabulary.value
-    //     .where((voca) => voca.is_studied && voca.topic_id == topic.id)
-    //     .toList();
-    // if (listStudied.isEmpty) {
-    //   await studyVocabulary(listVocaAllow.value.first);
-    //   listStudied.value.add(listVocaAllow.value.first);
-    //   listVocaAllow.value.removeAt(0);
-    // }
     vocabulary.value = voca;
-    //  Get.find<TopicController>().loading.value=false;
     Get.toNamed('/vocabulary');
     Get.find<TopicController>().loading.value = false;
   }
