@@ -101,7 +101,7 @@ class TopicScreen extends StatelessWidget {
                 ),
                 // Lớp phủ màu đen mờ để chữ nổi bật
                 Container(
-                  height: Get.height * 0.2,
+                  height: Get.height * 0.15,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -182,7 +182,7 @@ class TopicScreen extends StatelessWidget {
             onTap: () async {
               // Get.find<TopicController>().topic.value = topic;
               // Get.toNamed('/vocabulary');
-              await Get.find<VocabularyController>().gotoAllVocabulary(topic);
+              // await Get.find<VocabularyController>().gotoAllVocabulary(topic);
             },
             child: Stack(
               alignment: Alignment.bottomLeft,
@@ -194,14 +194,17 @@ class TopicScreen extends StatelessWidget {
                 ),
                 // Lớp phủ màu đen mờ để chữ nổi bật
                 Container(
-                  height: Get.height * 0.2,
+                  height: completed.value == total.value
+                      ? Get.height * 0.075
+                      : Get.height * 0.4,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.transparent,
-                        Colors.black.withOpacity(0.7)
+                        Colors.black.withOpacity(
+                            completed.value == total.value ? 0.3 : 0.7)
                       ],
                     ),
                   ),
@@ -217,23 +220,25 @@ class TopicScreen extends StatelessWidget {
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: completed.value == total.value
+                                      ? Colors.white
+                                      : Colors.grey,
                                 ),
                       ),
-                      Text(
-                        'Đã học ${completed.value}/${total.value} từ',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.white70,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      SizedBox(height: Get.height * 0.01),
-                      LinearProgressIndicator(
-                        value: completed.value / total.value,
-                        backgroundColor: Colors.white.withOpacity(0.3),
-                        valueColor:
-                            const AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
+                      // Text(
+                      //   'Đã học ${completed.value}/${total.value} từ',
+                      //   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      //         color: Colors.white70,
+                      //         fontWeight: FontWeight.bold,
+                      //       ),
+                      // ),
+                      // SizedBox(height: Get.height * 0.01),
+                      // LinearProgressIndicator(
+                      //   value: completed.value / total.value,
+                      //   backgroundColor: Colors.white.withOpacity(0.3),
+                      //   valueColor:
+                      //       const AlwaysStoppedAnimation<Color>(Colors.white),
+                      // ),
                     ],
                   ),
                 ),

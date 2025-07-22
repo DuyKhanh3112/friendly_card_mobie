@@ -83,16 +83,17 @@ class VocabularyScreen extends StatelessWidget {
                                 : InkWell(
                                     onTap: () async {
                                       await Tool.textToSpeak(
-                                          isFront.value
-                                              ? Get.find<VocabularyController>()
-                                                  .vocabulary
-                                                  .value
-                                                  .name
-                                              : Get.find<VocabularyController>()
-                                                  .vocabulary
-                                                  .value
-                                                  .mean,
-                                          isFront.value ? 'en-US' : 'vi-VN');
+                                        isFront.value
+                                            ? Get.find<VocabularyController>()
+                                                .vocabulary
+                                                .value
+                                                .name
+                                            : Get.find<VocabularyController>()
+                                                .vocabulary
+                                                .value
+                                                .mean,
+                                        isFront.value ? 'en-US' : 'vi-VN',
+                                      );
                                     },
                                     child: Container(
                                       margin: EdgeInsets.all(Get.width * 0.02),
