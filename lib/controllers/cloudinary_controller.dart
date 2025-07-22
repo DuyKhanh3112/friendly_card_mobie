@@ -57,7 +57,7 @@ class CloudinaryController {
     }
   }
 
-  Future<void> deleteImage(String url, String folder) async {
+  Future<void> deleteImage(String url) async {
     await cloudinary.destroy(url);
   }
 }
