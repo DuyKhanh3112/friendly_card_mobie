@@ -9,6 +9,7 @@ class CloudinaryController {
     apiSecret: Config.apiSecret,
     cloudName: Config.cloudName,
   );
+
   Future<String> uploadImageFile(
     String filePath,
     String fileName,
@@ -56,7 +57,7 @@ class CloudinaryController {
     }
   }
 
-  Future<void> deleteImage(String id, String folder) async {
-    await cloudinary.destroy('$folder/$id');
+  Future<void> deleteImage(String url, String folder) async {
+    await cloudinary.destroy(url);
   }
 }
