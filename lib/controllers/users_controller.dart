@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:friendly_card_mobile/controllers/cloudinary_controller.dart';
 import 'package:friendly_card_mobile/controllers/main_controller.dart';
 import 'package:friendly_card_mobile/models/users.dart';
 import 'package:get/get.dart';
@@ -92,6 +93,45 @@ class UsersController extends GetxController {
     user.value.update_at = Timestamp.now();
     user.value.daily_goal = goal;
     await usersCollection.doc(user.value.id).update(user.value.toVal());
+    loading.value = false;
+  }
+
+  Future<bool> checkExistEmail(String email) async {
+    loading.value = true;
+    var snapshot = await usersCollection
+        .where('email', isEqualTo: email)
+        .where('role', isEqualTo: 'learner')
+        .where('active', isEqualTo: true)
+        .get();
+    loading.value = false;
+    return snapshot.docs.isNotEmpty;
+  }
+
+  Future<bool> checkExistUsername(String uname) async {
+    loading.value = true;
+    var snapshot = await usersCollection
+        .where('username', isEqualTo: uname)
+        .where('role', isEqualTo: 'learner')
+        .where('active', isEqualTo: true)
+        .get();
+    loading.value = false;
+    return snapshot.docs.isNotEmpty;
+  }
+
+  Future<void> registerLearner(Users learner, String filePath) async {
+    loading.value = true;
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+    String id = usersCollection.doc().id;
+    DocumentReference refTeacher = usersCollection.doc(id);
+    learner.update_at = Timestamp.now();
+    learner.role = 'teacher';
+
+    if (filePath == '') {
+      learner.avatar = await CloudinaryController().uploadImageFile(
+          filePath, learner.username, 'learner/${learner.username}');
+    }
+    batch.set(refTeacher, learner.toVal());
+    await batch.commit();
     loading.value = false;
   }
 }

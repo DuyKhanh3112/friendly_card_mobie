@@ -51,6 +51,8 @@ dependencies:
   dropdown_button2: ^2.3.9
   flip_card: ^0.7.0
   flutter_tts: ^4.2.3
+  image_picker: ^1.1.2
+  mailer: ^6.4.1
 
 dev_dependencies:
   flutter_test:

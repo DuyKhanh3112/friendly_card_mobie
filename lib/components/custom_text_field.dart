@@ -21,6 +21,7 @@ class CustomTextField extends StatelessWidget {
     this.multiLines,
     this.bgColor,
     this.prefix,
+    this.minLength,
   });
 
   final String label;
@@ -34,6 +35,7 @@ class CustomTextField extends StatelessWidget {
   final ContactType? type;
   final Color? bgColor;
   final Icon? prefix;
+  final int? minLength;
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +55,17 @@ class CustomTextField extends StatelessWidget {
           ),
           obscureText: hideContent.value,
           maxLines: multiLines == true ? 3 : 1,
-          keyboardType:
-              type == ContactType.number ? TextInputType.number : null,
-          inputFormatters: type == ContactType.number
-              ? [FilteringTextInputFormatter.digitsOnly]
+          keyboardType: type == ContactType.number || type == ContactType.phone
+              ? TextInputType.number
               : null,
+          inputFormatters:
+              type == ContactType.number || type == ContactType.phone
+                  ? [FilteringTextInputFormatter.digitsOnly]
+                  : null,
           minLines: 1,
           decoration: InputDecoration(
             labelText: label,
+            errorMaxLines: 2,
             labelStyle: TextStyle(
               fontSize: 16,
               color: AppColor.blue,
@@ -99,15 +104,32 @@ class CustomTextField extends StatelessWidget {
           ),
           validator: (value) {
             if (required == true) {
-              if (value == null || value.trim() == '' || value.isEmpty) {
+              if (value == null ||
+                  value.removeAllWhitespace == '' ||
+                  value.isEmpty) {
                 return 'Vui lòng nhập $label';
               }
+            }
+            if (minLength != null) {
+              if (value!.length < minLength!) {
+                return '$label ít nhất $minLength ký tự';
+              }
+            }
+            if (value!.isNotEmpty) {
               if (type == ContactType.mail) {
                 final RegExp emailRegExp = RegExp(
                   r"^[\w-\.]+@([\w-]+\.){1,}[\w-]{1,}$",
                 );
                 if (!emailRegExp.hasMatch(value)) {
                   return '${label} không hợp lệ. Ví dụ: user@gmail.com';
+                }
+              }
+              if (type == ContactType.phone) {
+                final RegExp phoneRegExp = RegExp(
+                    r'^(0|\+84|84)(3[2-9]|5[6|8|9]|7[0|6-9]|8[1-5]|9[0-9])[0-9]{7}$');
+
+                if (!phoneRegExp.hasMatch(value.removeAllWhitespace)) {
+                  return '${label} không hợp lệ. Ví dụ: +84901234567 hoặc 84901234567 hoặc 0901234567';
                 }
               }
               if (type == ContactType.number) {

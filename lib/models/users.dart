@@ -39,7 +39,8 @@ class Users {
       role: 'learner',
       email: '',
       phone: '',
-      avatar: '',
+      avatar:
+          'https://res.cloudinary.com/drir6xyuq/image/upload/v1749203203/logo_icon.png',
       active: true,
       daily_goal: 0,
     );

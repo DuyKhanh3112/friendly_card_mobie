@@ -52,6 +52,7 @@ class LoginPage extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 48),
+
                           CustomTextField(
                             label: 'Tên đăng nhập',
                             controller: usernameController,
@@ -126,7 +127,9 @@ class LoginPage extends StatelessWidget {
                                 ),
                               ),
                               InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Get.toNamed('/register');
+                                },
                                 child: Text(
                                   'Đăng ký ngay',
                                   style: TextStyle(
