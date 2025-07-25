@@ -1,4 +1,6 @@
+import 'package:friendly_card_mobile/controllers/exercise_controller.dart';
 import 'package:friendly_card_mobile/controllers/main_controller.dart';
+import 'package:friendly_card_mobile/controllers/question_controller.dart';
 import 'package:friendly_card_mobile/controllers/study_history_controller.dart';
 import 'package:friendly_card_mobile/controllers/topic_controller.dart';
 import 'package:friendly_card_mobile/controllers/users_controller.dart';
@@ -13,6 +15,9 @@ class InitalBinding extends Bindings {
     Get.put(TopicController());
     Get.put(VocabularyController());
     Get.put(StudyHistoryController());
+    Get.put(QuestionController());
+    Get.put(ExerciseController());
+
     // print(await Get.find<UsersController>().getSession());
     // print('====');
     if (await Get.find<UsersController>().getSession() == null) {

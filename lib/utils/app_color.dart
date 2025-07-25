@@ -10,4 +10,5 @@ class AppColor {
   static Color drakBlue = const Color(0xFF00008B);
   static Color skyBlue = const Color(0xFF87CEEB).withOpacity(0.3);
   static Color royalBlue = Color(0xFF4169E1);
+  static Color white = Colors.white;
 }

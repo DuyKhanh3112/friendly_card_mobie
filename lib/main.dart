@@ -16,7 +16,10 @@ import 'package:friendly_card_mobile/models/vocabulary.dart';
 import 'package:friendly_card_mobile/utils/inital_binding.dart';
 import 'package:friendly_card_mobile/views/home_page.dart';
 import 'package:friendly_card_mobile/views/login_page.dart';
-import 'package:friendly_card_mobile/views/screens/all_vocabulary_screen.dart';
+import 'package:friendly_card_mobile/views/screens/exercise_detail_all_screen.dart';
+import 'package:friendly_card_mobile/views/screens/exercise_detail_screen.dart';
+import 'package:friendly_card_mobile/views/screens/vocabulary_all_screen.dart';
+import 'package:friendly_card_mobile/views/screens/exercise_screen.dart';
 import 'package:friendly_card_mobile/views/screens/register_screen.dart';
 import 'package:friendly_card_mobile/views/screens/vocabulary_screen.dart';
 import 'package:get/get.dart';
@@ -134,6 +137,18 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/register',
           page: () => const RegisterScreen(),
+        ),
+        GetPage(
+          name: '/exercise',
+          page: () => ExerciseScreen(),
+        ),
+        GetPage(
+          name: '/exercise_detail',
+          page: () => ExerciseDetailScreen(),
+        ),
+        GetPage(
+          name: '/exercise_detail_all',
+          page: () => ExerciseDetailAllScreen(),
         ),
       ],
     );

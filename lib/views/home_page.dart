@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.gamepad_rounded),
-              label: 'Luyện tập',
+              label: 'Bài tập',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),

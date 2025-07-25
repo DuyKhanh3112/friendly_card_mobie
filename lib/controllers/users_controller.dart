@@ -124,7 +124,7 @@ class UsersController extends GetxController {
     String id = usersCollection.doc().id;
     DocumentReference refTeacher = usersCollection.doc(id);
     learner.update_at = Timestamp.now();
-    learner.role = 'teacher';
+    learner.role = 'learner';
 
     if (filePath == '') {
       learner.avatar = await CloudinaryController().uploadImageFile(

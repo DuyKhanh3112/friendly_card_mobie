@@ -1,7 +1,11 @@
 // ignore_for_file: invalid_use_of_protected_member, deprecated_member_use
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:friendly_card_mobile/components/custom_dialog.dart';
+import 'package:friendly_card_mobile/controllers/exercise_controller.dart';
 import 'package:friendly_card_mobile/controllers/main_controller.dart';
+import 'package:friendly_card_mobile/controllers/question_controller.dart';
 import 'package:friendly_card_mobile/controllers/topic_controller.dart';
 import 'package:friendly_card_mobile/controllers/vocabulary_controller.dart';
 import 'package:friendly_card_mobile/models/topic.dart';
@@ -180,9 +184,21 @@ class TopicScreen extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: InkWell(
             onTap: () async {
-              // Get.find<TopicController>().topic.value = topic;
-              // Get.toNamed('/vocabulary');
-              // await Get.find<VocabularyController>().gotoAllVocabulary(topic);
+              if (completed.value != total.value) {
+                showAlertDialog(
+                  context,
+                  DialogType.warning,
+                  'Chưa hoàn thành từ vựng',
+                  'Vui lòng hoàn thành tất cả từ vựng trước khi làm bài tập.',
+                );
+              } else {
+                Get.find<TopicController>().topic.value = topic;
+                Get.find<TopicController>().loading.value = true;
+                await Get.find<QuestionController>().fetchQuestions();
+                await Get.find<ExerciseController>().fetchExercises();
+                Get.find<TopicController>().loading.value = false;
+                Get.toNamed('/exercise');
+              }
             },
             child: Stack(
               alignment: Alignment.bottomLeft,
@@ -225,20 +241,6 @@ class TopicScreen extends StatelessWidget {
                                       : Colors.grey,
                                 ),
                       ),
-                      // Text(
-                      //   'Đã học ${completed.value}/${total.value} từ',
-                      //   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      //         color: Colors.white70,
-                      //         fontWeight: FontWeight.bold,
-                      //       ),
-                      // ),
-                      // SizedBox(height: Get.height * 0.01),
-                      // LinearProgressIndicator(
-                      //   value: completed.value / total.value,
-                      //   backgroundColor: Colors.white.withOpacity(0.3),
-                      //   valueColor:
-                      //       const AlwaysStoppedAnimation<Color>(Colors.white),
-                      // ),
                     ],
                   ),
                 ),

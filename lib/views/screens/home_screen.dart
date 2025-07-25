@@ -346,7 +346,7 @@ class MainFeaturesWidget extends StatelessWidget {
               () async {
             Get.find<MainController>().currentPage.value = 1;
           }),
-          _buildFeatureItem(context, Icons.gamepad_rounded, 'Luyện tập',
+          _buildFeatureItem(context, Icons.gamepad_rounded, 'Bài tập',
               () async {
             Get.find<MainController>().currentPage.value = 2;
           }),

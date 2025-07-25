@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_function_declarations_over_variables
+
 import 'dart:convert';
 
 import 'package:flutter_tts/flutter_tts.dart';
@@ -57,5 +59,16 @@ class Tool {
     await flutterTts.setSpeechRate(0.5); // 0.0 - 1.0
     await flutterTts.setVolume(1.0); // 0.0 - 1.0
     await flutterTts.speak(text);
+  }
+
+  static String formatTimestamp(int timestamp) {
+    final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    final twoDigits = (int n) => n.toString().padLeft(2, '0');
+    final minute = twoDigits(date.minute);
+    final hour = twoDigits(date.hour);
+    final day = twoDigits(date.day);
+    final month = twoDigits(date.month);
+    final year = date.year;
+    return '$minute:$hour $day/$month/$year';
   }
 }
